@@ -3,10 +3,6 @@ import { generateNewProduct } from "data/products/productGeneration";
 import { expect, test as base } from "fixtures/common/services.fixture";
 import { Users } from "utils/entities/index";
 import { HTTP_STATUS_CODES } from "data/http/statusCodes";
-import map from "../../utils/array/map";
-import { keyMapper } from "../../utils/mapper";
-import { IChipsFilterOptions } from "../../ui/pages/products/productsList.page";
-import forEach from "../../utils/array/forEach";
 
 interface ProductFixture {
   createProductViaApi: (product?: IProduct, token?: string) => Promise<IProductFromResponse>;

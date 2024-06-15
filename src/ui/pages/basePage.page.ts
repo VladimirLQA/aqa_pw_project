@@ -5,9 +5,11 @@ import { isLocator } from "utils/typeGuards/selector";
 import { IResponse } from "types/api/apiClient.types";
 import { logStep } from "utils/reporter/decorators/logStep";
 
-export class BasePage {
+export class PageHolder {
   constructor(protected page: Page) {}
+}
 
+export class BasePage extends PageHolder {
   findElement(selectorOrElement: string | Locator) {
     return isLocator(selectorOrElement) ? selectorOrElement : this.page.locator(selectorOrElement);
   }
