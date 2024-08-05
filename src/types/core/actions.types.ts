@@ -1,4 +1,4 @@
-import { Locator } from "@playwright/test";
+import { Locator } from '@playwright/test';
 
 export interface IWaitUntilOptions {
   timeout?: number;
@@ -11,4 +11,4 @@ export type ResizeCoordinates = {
   yOffset: number;
 };
 
-export type ElementState = "attached" | "detached" | "visible" | "hidden";
+export type ElementState = 'attached' | 'detached' | 'visible' | 'hidden';

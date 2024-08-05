@@ -1,11 +1,11 @@
 import {
   createAndVerifyProductsTableData as test,
-} from "../../../fixtures/common/pageFactory.fixture";
+} from '../../../fixtures/common/pageFactory.fixture';
 
-test.describe("test", () => {
-  test.only("[Products]. [Should verify table data after search with filters]", async (
-    { salesPortal, createdProducts }) => {
-
+test.describe('test', () => {
+  test('[Products]. [Should verify table data after search with filters]', async (
+    { salesPortal, createdProducts },
+  ) => {
     const [p1, p2, ...p] = createdProducts;
     await salesPortal.homePage.openProductsPage();
     await salesPortal.productPageService.productsListPage.clickOnFilterButton();

@@ -1,7 +1,5 @@
-import reporter from "utils/reporter/reporters/reporter";
+import reporter from 'utils/reporter/reporters/reporter';
 
-async function globalSetup() {
-  reporter.clearReportResults();
-}
+const globalSetup = async () => reporter.clearReportResults();
 
 export default globalSetup;

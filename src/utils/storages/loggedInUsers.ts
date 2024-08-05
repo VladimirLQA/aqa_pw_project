@@ -1,6 +1,6 @@
-import { ILoginResponse } from "types/user/user.types";
+import { ILoginResponse } from 'types/user/user.types';
 
-interface ILoggedInUser {
+export interface ILoggedInUser {
   username: string;
   token: string;
 }
@@ -18,7 +18,9 @@ export class LoggedInUsers {
   }
 
   setToken(loginResponse: ILoginResponse, username?: string) {
-    username ? (this.findUserByUsername(username).token = this.createTokenFromResponse(loginResponse)) : (this.users[this.users.length - 1].token = this.createTokenFromResponse(loginResponse));
+    username
+      ? (this.findUserByUsername(username).token = this.createTokenFromResponse(loginResponse))
+      : (this.users[this.users.length - 1].token = this.createTokenFromResponse(loginResponse));
   }
 
   setUser(username: string, loginResponse: ILoginResponse) {
@@ -30,7 +32,9 @@ export class LoggedInUsers {
   }
 
   removeToken(username?: string) {
-    username ? (this.findUserByUsername(username).token = "") : (this.users[this.users.length - 1].token = "");
+    username
+      ? (this.findUserByUsername(username).token = '')
+      : (this.users[this.users.length - 1].token = '');
   }
 
   createTokenFromResponse(loginResponse: ILoginResponse) {

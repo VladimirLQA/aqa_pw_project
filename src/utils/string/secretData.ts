@@ -1,3 +1,1 @@
-export function hideSecretData(text: string) {
-  return text.replace(/./g, "*");
-}
+export const hideSecretData = (text: string) => text.replace(/./g, '*');

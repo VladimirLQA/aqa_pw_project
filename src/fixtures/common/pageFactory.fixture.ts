@@ -1,11 +1,11 @@
-import { test as base } from "@playwright/test";
-import { Application } from "fixtures/common/application";
-import { SalesPortalServices } from "../../api/services";
-import { generateNewProduct } from "../../data/products/productGeneration";
-import { Users } from "../../utils/entities";
-import { HTTP_STATUS_CODES } from "../../data/http/statusCodes";
-import { IProductFromResponse } from "../../types/products/product.types";
-import { expect } from "playwright/test";
+import { test as base } from '@playwright/test';
+import { Application } from 'fixtures/common/application';
+import { expect } from 'playwright/test';
+import { SalesPortalServices } from '../../api/services';
+import { generateNewProduct } from '../../data/products/productGeneration';
+import { Users } from '../../utils/storages';
+import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
+import { IProductFromResponse } from '../../types/products/product.types';
 
 interface PageFactoryFixture {
   salesPortal: Application;

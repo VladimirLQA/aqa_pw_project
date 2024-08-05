@@ -1,3 +1,3 @@
-import { hideSecretData } from "utils/string/secretData.js";
+import { hideSecretData } from 'utils/string/secretData';
 
 export { hideSecretData };

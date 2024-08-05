@@ -1,20 +1,20 @@
-import { IRequestOptions, IResponse, RequestParams } from "types/api/apiClient.types";
-import { ILoginResponse, IUserCredentials } from "types/user/user.types";
-import { apiConfig } from "api/config/apiConfig";
-import apiClient from "api/apiClients/apiClient";
-import { logStep } from "utils/reporter/decorators/logStep";
+import { IRequestOptions, RequestParams } from 'types/api/apiClient.types';
+import { ILoginResponse, IUserCredentials } from 'types/user/user.types';
+import { apiConfig } from 'api/config/apiConfig';
+import apiClient from 'api/apiClients/apiClient';
+import { logStep } from 'utils/reporter/decorators/logStep';
 
 class SignInService {
-  @logStep("Sign in via API")
+  @logStep('Sign in via API')
   async login(params: RequestParams<IUserCredentials>) {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Login,
       options: {
-        method: "post",
+        method: 'post',
         headers: {},
         data: params.data,
       },
-      requestType: "json",
+      requestType: 'json',
     };
     return apiClient.sendRequest<ILoginResponse>(options);
   }

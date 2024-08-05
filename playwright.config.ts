@@ -6,7 +6,6 @@ import { apiConfig } from "api/config/apiConfig";
 import suite from "./suites";
 
 dotenv.config();
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -17,9 +16,10 @@ dotenv.config();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  globalSetup: require.resolve("./global-setup"),
+  // globalSetup: require.resolve("./global-setup"),
   updateSnapshots: "missing",
-  testDir: suite,
+  testDir: "src/tests",
+  testMatch: suite,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -49,7 +49,8 @@ export default defineConfig({
 
     /* Screenshot on failure. */
     screenshot: "only-on-failure",
-    baseURL: process.env.TESTS === "UI" ? URL : apiConfig.baseURL,
+    // baseURL: process.env.TESTS === "UI" ? URL : apiConfig.baseURL,
+    baseURL: URL,
     launchOptions: {
       args: ["--start-maximized"],
     },

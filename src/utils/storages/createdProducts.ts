@@ -1,7 +1,8 @@
-import type { IProductFromResponse } from "types/products/product.types.js";
+import type { IProductFromResponse } from 'types/products/product.types';
 
 export class CreatedProducts {
   private static instance: CreatedProducts;
+
   private products: IProductFromResponse[] = [];
 
   constructor() {

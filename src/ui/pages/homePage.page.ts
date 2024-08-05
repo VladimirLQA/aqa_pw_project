@@ -1,12 +1,12 @@
-import { logStep } from "utils/reporter/decorators/logStep";
-import { SalesPortalPage } from "ui/pages/salesPortal.page";
+import { logStep } from 'utils/reporter/decorators/logStep';
+import { SalesPortalPage } from 'ui/pages/salesPortal.page';
 
 export class HomePage extends SalesPortalPage {
-  readonly "Products button" = this.findElement("#products-from-home");
+  readonly 'Products button' = this.findElement('#products-from-home');
 
-  @logStep("Open Products Page")
+  @logStep('Open Products Page')
   async openProductsPage() {
-    await this.click(this["Products button"]);
+    await this.clickOn(this['Products button']);
     await this.waitForSpinnerToHide();
   }
 }

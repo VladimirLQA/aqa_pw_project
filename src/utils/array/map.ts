@@ -1,4 +1,4 @@
-import { MaybePromise, AsyncCallback, Settings } from "types/data/functions.types";
+import { MaybePromise, AsyncCallback, Settings } from 'types/data/functions.types';
 
 /**
  * iterate async array and returns new array with results
@@ -19,7 +19,6 @@ export default async function map<T, U>(array: MaybePromise<readonly T[]>, callb
       mappedArr.push(await callback(awaited[i], i, awaited));
     }
     return mappedArr;
-  } else {
-    return Promise.all(awaited.map(callback));
   }
+  return Promise.all(awaited.map(callback));
 }

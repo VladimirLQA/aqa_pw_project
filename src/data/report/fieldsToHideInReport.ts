@@ -1,1 +1,1 @@
-export default ["password"];
+export default ['password'];

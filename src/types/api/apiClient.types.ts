@@ -7,10 +7,10 @@ export type IRequestOptions<Data = object> = {
     data?: Data;
     timeout?: number;
   };
-  requestType: "json" | "formData";
+  requestType: 'json' | 'formData';
 };
 
-type Method = "post" | "get" | "put" | "patch" | "delete";
+type Method = 'post' | 'get' | 'put' | 'patch' | 'delete';
 
 export interface IResponse<T = any> {
   data: T;
@@ -27,7 +27,7 @@ export type Id = {
   _id: string;
 };
 
-export interface IPostRequestParams<T> {
-  data: T;
-  token?: string;
-}
+// export interface IPostRequestParams<T> {
+//   data: T;
+//   token?: string;
+// }

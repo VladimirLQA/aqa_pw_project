@@ -1,15 +1,31 @@
-import { Locator, Page } from "@playwright/test";
-import { ElementState, IWaitUntilOptions, ResizeCoordinates } from "types/core/actions.types";
-import { DEFAULT_TIMEOUT, TIMEOUT_10_SEC } from "utils/timeouts";
-import { isLocator } from "utils/typeGuards/selector";
-import { IResponse } from "types/api/apiClient.types";
-import { logStep } from "utils/reporter/decorators/logStep";
+import { Locator, Page } from '@playwright/test';
+import { ElementState, IWaitUntilOptions, ResizeCoordinates } from 'types/core/actions.types';
+import { TIMEOUT_5_SEC, TIMEOUT_10_SEC } from 'utils/timeouts';
+import { isLocator } from 'utils/typeGuards/selector';
+import { IResponse } from 'types/api/apiClient.types';
+import { logStep } from 'utils/reporter/decorators/logStep';
+import map from '../../utils/array/map';
+import { URL } from '../../config/environment';
+import { waitUntil } from '../../utils/utils';
 
-export class PageHolder {
-  constructor(protected page: Page) {}
+export interface IOptions {
+  timeout?: number;
 }
 
-export class BasePage extends PageHolder {
+export interface TSecretValue extends IOptions {
+  isSecret: boolean;
+}
+
+export interface IOptionsWithState extends IOptions {
+  state?: ElementState;
+}
+
+export abstract class PageHolder {
+  constructor(protected page: Page) {
+  }
+}
+
+export abstract class BasePage extends PageHolder {
   findElement(selectorOrElement: string | Locator) {
     return isLocator(selectorOrElement) ? selectorOrElement : this.page.locator(selectorOrElement);
   }
@@ -19,31 +35,15 @@ export class BasePage extends PageHolder {
     return elements;
   }
 
-  private async waitUntil(condition: () => Promise<boolean>, options?: IWaitUntilOptions) {
-    const interval = options?.interval ?? 500;
-    const timeout = options?.timeout || TIMEOUT_10_SEC;
-    const timeoutMessage = options?.timeoutMsg || `Condition not met within the specified timeout.`;
-    let elapsedTime = 0;
+  async waitForElement(selector: string | Locator, options: IOptionsWithState = { timeout: TIMEOUT_10_SEC }) {
+    const { state, timeout } = options;
 
-    while (elapsedTime < timeout) {
-      if (await condition()) {
-        return;
-      }
-
-      await this.page.waitForTimeout(interval);
-      elapsedTime += interval;
-    }
-
-    throw new Error(timeoutMessage);
-  }
-
-  async waitForElement(selector: string | Locator, state: ElementState, timeout = DEFAULT_TIMEOUT) {
     const element = this.findElement(selector);
     await element.waitFor({ state, timeout });
     return element;
   }
 
-  async waitForElementAndScroll(selector: string | Locator, timeout = DEFAULT_TIMEOUT) {
+  async waitForElementAndScroll(selector: string | Locator, timeout = TIMEOUT_5_SEC) {
     const element = this.findElement(selector);
     try {
       await element.scrollIntoViewIfNeeded({ timeout });
@@ -54,7 +54,7 @@ export class BasePage extends PageHolder {
   }
 
   @logStep()
-  async click(selector: string | Locator, timeout?: number) {
+  async clickOn(selector: string | Locator, timeout?: number) {
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
       await element.click({ timeout });
@@ -63,8 +63,12 @@ export class BasePage extends PageHolder {
     }
   }
 
-  @logStep()
-  async setValue(selector: string | Locator, text: string, timeout?: number) {
+  @logStep('Fill value "{value}" into element')
+  async fillValue(selector: string | Locator, text: string, options: TSecretValue = {
+    isSecret: false,
+    timeout: TIMEOUT_5_SEC,
+  }) {
+    const { timeout } = options;
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
       if (element) {
@@ -80,7 +84,7 @@ export class BasePage extends PageHolder {
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
       if (element) {
-        await element.fill("", { timeout });
+        await element.fill('', { timeout });
       }
     } catch (error) {
       throw error;
@@ -101,9 +105,35 @@ export class BasePage extends PageHolder {
   }
 
   @logStep()
-  async openPage(url: string) {
+  async selectDropdownValueWithKeys(dropdownSelector: string | Locator, options: string | Locator, optionName: string, timeout?: number) {
+    await this.clickOn(dropdownSelector);
+    const optionsEl = this.findElementArray(options);
+    const values = await map(optionsEl, async (o) => o.innerText());
+
+    const idx = values.indexOf(optionName);
+
+    if (idx === -1) throw Error(`Dropdown option with name '${optionName}' was not found`);
+
+    const keys = Array(idx).fill('ArrowDown');
+    await this.pressKey([...keys, 'Enter']);
+  }
+
+  @logStep()
+  async pressKey(key: string | string[], delay = 1000) {
+    if (Array.isArray(key)) {
+      for (const k of key) {
+        console.log('press', k);
+        await this.page.keyboard.press(k, { delay });
+      }
+    } else {
+      await this.page.keyboard.press(key, { delay });
+    }
+  }
+
+  @logStep()
+  async openPage(url = URL) {
     try {
-      await this.page.goto(url, { waitUntil: "domcontentloaded" });
+      await this.page.goto(url, { waitUntil: 'domcontentloaded' });
     } catch (error) {
       throw error;
     }
@@ -186,7 +216,7 @@ export class BasePage extends PageHolder {
   //         let actualText = await this.getText(n);
   //         if (text === actualText) {
   //           expectedNotification = n;
-  //           await this.click(n);
+  //           await this.clickOn(n);
   //           await this.waitForElement(n, "hidden");
   //           break;
   //         }
@@ -197,21 +227,21 @@ export class BasePage extends PageHolder {
   //   );
   // }
 
-  async waitForElementToChangeText(selector: string | Locator, text: string, timeout = DEFAULT_TIMEOUT) {
-    await this.waitUntil(
+  async waitForElementToChangeText(selector: string | Locator, text: string, timeout = TIMEOUT_5_SEC) {
+    await waitUntil(
       async () => {
         const elementText = await this.getText(selector);
         return elementText === text;
       },
-      { timeout, timeoutMsg: `Element still does not has text ${text}` }
+      { timeout, timeoutMsg: `Element does not have text "${text}" after ${timeout} seconds` },
     );
   }
 
-  async waitForElementsArrayToBeDisplayed(selector: string | Locator, reverse?: boolean, timeout = DEFAULT_TIMEOUT) {
-    await this.waitUntil(async () => {
+  async waitForElementsArrayToBdDisplayed(selector: string | Locator, reverse?: boolean, timeout = TIMEOUT_5_SEC) {
+    await waitUntil(async () => {
       const elements = await this.findElementArray(selector);
       for (const element of elements) {
-        await this.waitForElement(element, reverse ? "visible" : "hidden", timeout);
+        await this.waitForElement(element, { state: reverse ? 'visible' : 'hidden', timeout });
       }
       return true;
     });

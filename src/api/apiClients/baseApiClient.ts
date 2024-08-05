@@ -1,10 +1,11 @@
-import fieldsToHideInReport from "data/report/fieldsToHideInReport";
-import { IRequestOptions, IResponse } from "types/api/apiClient.types";
-import { hideValueInObject } from "utils/object/index";
-import { BaseReporter } from "utils/reporter/reporters/baseReporter";
+import fieldsToHideInReport from 'data/report/fieldsToHideInReport';
+import { IRequestOptions, IResponse } from 'types/api/apiClient.types';
+import { hideValueInObject } from 'utils/object/index';
+import { BaseReporter } from 'utils/reporter/reporters/baseReporter';
 
 export abstract class BaseApiClient {
   protected response: any;
+
   protected options: IRequestOptions | null;
 
   /**
@@ -41,7 +42,7 @@ export abstract class BaseApiClient {
   async sendRequest<T>(initOptions: IRequestOptions): Promise<IResponse<T>> {
     try {
       this.options = initOptions;
-      if (!this.options) throw new Error(`Request options were not provided`);
+      if (!this.options) throw new Error('Request options were not provided');
       this.transformRequestOptions();
       this.response = await this.send();
       await this.transformResponse();

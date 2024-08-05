@@ -1,8 +1,8 @@
-import { IProduct, IProductFromResponse } from "types/products/product.types";
-import { generateNewProduct } from "data/products/productGeneration";
-import { expect, test as base } from "fixtures/common/services.fixture";
-import { Users } from "utils/entities/index";
-import { HTTP_STATUS_CODES } from "data/http/statusCodes";
+import { IProduct, IProductFromResponse } from 'types/products/product.types';
+import { generateNewProduct } from 'data/products/productGeneration';
+import { expect, test as base } from 'fixtures/common/services.fixture';
+import { Users } from 'utils/storages';
+import { HTTP_STATUS_CODES } from 'data/http/statusCodes';
 
 interface ProductFixture {
   createProductViaApi: (product?: IProduct, token?: string) => Promise<IProductFromResponse>;
@@ -23,10 +23,12 @@ export const test = base.extend<ProductFixture>({
     };
 
     await use(createdProductViaApi);
-    if (createdProduct) await services.ProductService.delete({
-      data: { _id: (createdProduct as IProductFromResponse)._id },
-      token: Users.getToken(),
-    });
+    if (createdProduct) {
+      await services.ProductService.delete({
+        data: { _id: (createdProduct as IProductFromResponse)._id },
+        token: Users.getToken(),
+      });
+    }
   },
 
   getProductById: async ({ services }, use) => {
