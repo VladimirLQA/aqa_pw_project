@@ -1,5 +1,5 @@
 import { expect } from 'playwright/test';
-import { PageHolder } from '../../pages/basePage.page';
+import { PageHolder } from '../../pages/pageHolder.page';
 import { ProductsListPage } from '../../pages/products/productsList.page';
 import { AddNewProductPage } from '../../pages/products/addNewProduct.page';
 import { logStep } from '../../../utils/reporter/decorators/logStep';

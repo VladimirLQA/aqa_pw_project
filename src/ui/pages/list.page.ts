@@ -6,17 +6,9 @@ import map from '../../utils/array/map';
 import { keyMapper } from '../../utils/mapper';
 import forEach from '../../utils/array/forEach';
 import { capitalize } from '../../utils/utils';
-
-export interface IChipsFilterOptions {
-  search?: string;
-  quickFilters?: string[];
-}
-
-export type TListPageNames = 'Products';
+import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
 
 export class ListPage extends SalesPortalPage {
-  uniqueElement = '';
-
   protected readonly 'Table row selector' = (entityName: string) =>
     this.findElement(`//tr[./td[text()="${entityName}"]]`);
 
@@ -49,29 +41,32 @@ export class ListPage extends SalesPortalPage {
 
   readonly 'Search input field' = this.findElement('input[type=search]');
 
-  async getApiMappedData(pageName: string) {
+  async getApiMappedData<T extends any>(pageName: string) {
     const data = (await services[pageName]
       .getAll({ token: Users.getToken() })).data[capitalize(pageName) as TListPageNames];
 
     return map(data, (entity) => {
-      // @ts-ignore
       if (entity.price) entity.price = `$${entity.price}`;
-      // @ts-ignore
-      return keyMapper(entity, pageName);
+      return keyMapper<T>(entity, pageName);
     });
   }
 
-  async getTableDataAfterFilterAndSearch(tableData: Record<string, string>[],
-    chipFilters: IChipsFilterOptions) {
+  async getTableDataAfterFilterAndSearch(
+    tableData: Record<string, string>[], chipFilters: IChipsFilterOptions,
+  ) {
     const { search, quickFilters } = chipFilters;
     const filteredAndSearchedData: Record<string, string>[] = [];
 
     await forEach(tableData, async (entity) => {
       const isQuickFilter: boolean | undefined = quickFilters?.some((qf) =>
-        Object.values(entity).at(-1) === qf);
-      const isSearchFilter: boolean = Object.values(entity).some((val) =>
-      // @ts-ignore
-        val.toLowerCase().includes(search?.toLowerCase()));
+        Object.values(entity)[entity.length - 1] === qf);
+
+      let isSearchFilter: boolean;
+      if (search) {
+        isSearchFilter = Object.values(entity).some((val) =>
+        // @ts-ignore
+          val.toLowerCase().includes(search.toLowerCase()));
+      }
 
       if (search && quickFilters?.length) {
         if (isQuickFilter && isSearchFilter) filteredAndSearchedData.push(entity);
@@ -113,7 +108,6 @@ export class ListPage extends SalesPortalPage {
     const columnNames: [...string[]] = (await this['Table columns names row'](pageName)
       .allInnerTexts()).reduce((names, name, i, arr) => {
       if (i < arr.length - 2) {
-        // @ts-ignore
         names.push(name);
       }
       return names;
@@ -126,7 +120,6 @@ export class ListPage extends SalesPortalPage {
           values.push(v);
         }
       });
-      // @ts-ignore
       entities.push(Object.assign(...columnNames.map((k, idx) => ({ [k]: values[idx] }))));
     });
     return entities;

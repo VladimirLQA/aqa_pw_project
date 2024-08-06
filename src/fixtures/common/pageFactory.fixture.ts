@@ -8,14 +8,14 @@ import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 import { IProductFromResponse } from '../../types/products/product.types';
 
 interface PageFactoryFixture {
-  salesPortal: Application;
+  app: Application;
   services: SalesPortalServices;
   // assert: ;
 
 }
 
 export const baseFixture = base.extend<PageFactoryFixture>({
-  salesPortal: async ({ page }, use) => {
+  app: async ({ page }, use) => {
     await use(new Application(page));
   },
   services: async ({}, use) => {
@@ -27,29 +27,29 @@ export const baseFixture = base.extend<PageFactoryFixture>({
 
 });
 
-export const loggedAsAdmin = baseFixture.extend({
-  salesPortal: async ({ salesPortal }, use) => {
-    await salesPortal.signInPage.openSalesPortal();
-    await salesPortal.signInPage.signInAsAdmin();
-    await use(salesPortal);
-  },
-});
-
-export const createAndVerifyProductsTableData = loggedAsAdmin.extend<{
-  createdProducts: IProductFromResponse[],
-}>({
-  createdProducts: async ({ services }, use) => {
-    const createdProducts: IProductFromResponse[] = [];
-    for (let i = 1; i <= 5; i++) {
-      const data = generateNewProduct();
-      const response = await services.ProductService.create({ data, token: Users.getToken() });
-      expect(response.status).toBe(HTTP_STATUS_CODES.CREATED);
-      createdProducts.push(response.data.Product);
-    }
-    await use(createdProducts);
-
-    for (const p of createdProducts) {
-      await services.ProductService.delete({ token: Users.getToken(), data: { _id: p._id } });
-    }
-  },
-});
+// export const loggedAsAdmin = baseFixture.extend({
+//   salesPortal: async ({ salesPortal }, use) => {
+//     await salesPortal.signInPage.openSalesPortal();
+//     await salesPortal.signInPage.signInAsAdmin();
+//     await use(salesPortal);
+//   },
+// });
+//
+// export const createAndVerifyProductsTableData = loggedAsAdmin.extend<{
+//   createdProducts: IProductFromResponse[],
+// }>({
+//   createdProducts: async ({ services }, use) => {
+//     const createdProducts: IProductFromResponse[] = [];
+//     for (let i = 1; i <= 5; i++) {
+//       const data = generateNewProduct();
+//       const response = await services.ProductService.create({ data, token: Users.getToken() });
+//       expect(response.status).toBe(HTTP_STATUS_CODES.CREATED);
+//       createdProducts.push(response.data.Product);
+//     }
+//     await use(createdProducts);
+//
+//     for (const p of createdProducts) {
+//       await services.ProductService.delete({ token: Users.getToken(), data: { _id: p._id } });
+//     }
+//   },
+// });

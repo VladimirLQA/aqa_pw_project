@@ -1,18 +1,17 @@
 import { BasePage } from 'ui/pages/basePage.page';
 import { URL } from 'config/environment';
-import { TIMEOUT_10_SEC, TIMEOUT_5_SEC } from 'utils/timeouts';
+import { TIMEOUT_5_SEC } from 'utils/timeouts';
 import { logStep } from 'utils/reporter/decorators/logStep';
-import { expect } from 'playwright/test';
-import find from 'utils/array/find';
+import { UniqueElementProperty } from '../../types/common.types';
 
-export abstract class SalesPortalPage extends BasePage {
+export abstract class SalesPortalPage extends BasePage implements UniqueElementProperty {
   readonly 'Spinner' = this.findElement('.spinner-border');
 
   readonly 'Notification message' = this.findElement('.toast-body');
 
   readonly 'Close Notification button' = this.findElement('#toast button');
 
-  readonly uniqueElement: string = '';
+  readonly uniqueElement: string = 'Provide selector for unique element';
 
   async waitForOpened() {
     await this.waitForElement(this.uniqueElement);
@@ -26,8 +25,8 @@ export abstract class SalesPortalPage extends BasePage {
     await this.waitForSpinnerToHide();
   }
 
-  async getAuthorizationToken(url = URL) {
-    const cookies = await this.getCookies(url);
+  async getAuthorizationToken() {
+    const cookies = await this.getCookies();
     const token = cookies.find((cookie) => cookie.name === 'Authorization');
     return token?.value;
   }

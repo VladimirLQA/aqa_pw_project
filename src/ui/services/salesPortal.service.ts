@@ -6,9 +6,12 @@ export class SalesPortalService extends SalesPortalPage {
   async verifyAndCloseNotification(notificationText: string) {
     await this.waitForElement(this['Notification message'], { state: 'visible' });
     const notifications = await this.findElementArray(this['Notification message']);
-    const expectedNotification = await find(notifications, async (notification) => (await this.getText(notification)) === notificationText);
+    const expectedNotification = await find(notifications, async (notification) =>
+      (await this.getText(notification)) === notificationText);
 
-    if (!expectedNotification) throw new Error(`Notification message with text ${notificationText} was not found`);
+    if (!expectedNotification) {
+      throw new Error(`Notification message with text ${notificationText} was not found`);
+    }
 
     const actualText = await this.getText(expectedNotification);
     expect(actualText).toBe(notificationText);

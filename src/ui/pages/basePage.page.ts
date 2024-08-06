@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { ElementState, IWaitUntilOptions, ResizeCoordinates } from 'types/core/actions.types';
+import { ElementState, ResizeCoordinates } from 'types/core/actions.types';
 import { TIMEOUT_5_SEC, TIMEOUT_10_SEC } from 'utils/timeouts';
 import { isLocator } from 'utils/typeGuards/selector';
 import { IResponse } from 'types/api/apiClient.types';
@@ -7,6 +7,7 @@ import { logStep } from 'utils/reporter/decorators/logStep';
 import map from '../../utils/array/map';
 import { URL } from '../../config/environment';
 import { waitUntil } from '../../utils/utils';
+import { PageHolder } from './pageHolder.page';
 
 export interface IOptions {
   timeout?: number;
@@ -20,18 +21,15 @@ export interface IOptionsWithState extends IOptions {
   state?: ElementState;
 }
 
-export abstract class PageHolder {
-  constructor(protected page: Page) {
-  }
-}
-
 export abstract class BasePage extends PageHolder {
   findElement(selectorOrElement: string | Locator) {
     return isLocator(selectorOrElement) ? selectorOrElement : this.page.locator(selectorOrElement);
   }
 
   async findElementArray(selectorOrElement: string | Locator) {
-    const elements = isLocator(selectorOrElement) ? await selectorOrElement.all() : await this.findElement(selectorOrElement).all();
+    const elements = isLocator(selectorOrElement)
+      ? await selectorOrElement.all()
+      : await this.findElement(selectorOrElement).all();
     return elements;
   }
 
@@ -45,49 +43,32 @@ export abstract class BasePage extends PageHolder {
 
   async waitForElementAndScroll(selector: string | Locator, timeout = TIMEOUT_5_SEC) {
     const element = this.findElement(selector);
-    try {
-      await element.scrollIntoViewIfNeeded({ timeout });
-      return element;
-    } catch (error) {
-      throw error;
-    }
+    await element.scrollIntoViewIfNeeded({ timeout });
+    return element;
   }
 
   @logStep()
   async clickOn(selector: string | Locator, timeout?: number) {
-    try {
-      const element = await this.waitForElementAndScroll(selector, timeout);
-      await element.click({ timeout });
-    } catch (error) {
-      throw error;
-    }
+    const element = await this.waitForElementAndScroll(selector, timeout);
+    await element.click({ timeout });
   }
 
   @logStep('Fill value "{value}" into element')
   async fillValue(selector: string | Locator, text: string, options: TSecretValue = {
-    isSecret: false,
-    timeout: TIMEOUT_5_SEC,
+    isSecret: false, timeout: TIMEOUT_5_SEC,
   }) {
     const { timeout } = options;
-    try {
-      const element = await this.waitForElementAndScroll(selector, timeout);
-      if (element) {
-        await element.fill(text, { timeout });
-      }
-    } catch (error) {
-      throw error;
+    const element = await this.waitForElementAndScroll(selector, timeout);
+    if (element) {
+      await element.fill(text, { timeout });
     }
   }
 
   @logStep()
   async clear(selector: string | Locator, timeout?: number) {
-    try {
-      const element = await this.waitForElementAndScroll(selector, timeout);
-      if (element) {
-        await element.fill('', { timeout });
-      }
-    } catch (error) {
-      throw error;
+    const element = await this.waitForElementAndScroll(selector, timeout);
+    if (element) {
+      await element.fill('', { timeout });
     }
   }
 
@@ -105,7 +86,9 @@ export abstract class BasePage extends PageHolder {
   }
 
   @logStep()
-  async selectDropdownValueWithKeys(dropdownSelector: string | Locator, options: string | Locator, optionName: string, timeout?: number) {
+  async selectDropdownValueWithKeys(
+    dropdownSelector: string | Locator, options: string | Locator, optionName: string,
+  ) {
     await this.clickOn(dropdownSelector);
     const optionsEl = this.findElementArray(options);
     const values = await map(optionsEl, async (o) => o.innerText());
@@ -122,7 +105,6 @@ export abstract class BasePage extends PageHolder {
   async pressKey(key: string | string[], delay = 1000) {
     if (Array.isArray(key)) {
       for (const k of key) {
-        console.log('press', k);
         await this.page.keyboard.press(k, { delay });
       }
     } else {
@@ -132,11 +114,7 @@ export abstract class BasePage extends PageHolder {
 
   @logStep()
   async openPage(url = URL) {
-    try {
-      await this.page.goto(url, { waitUntil: 'domcontentloaded' });
-    } catch (error) {
-      throw error;
-    }
+    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
   }
 
   @logStep()
@@ -167,7 +145,7 @@ export abstract class BasePage extends PageHolder {
   }
 
   @logStep()
-  async resizeElement(selector: string | Locator, coordinates: ResizeCoordinates, timeout?: number) {
+  async resizeElement(selector: string | Locator, coordinates: ResizeCoordinates) {
     const element = await this.waitForElementAndScroll(selector);
 
     await this.page.waitForTimeout(1000);
@@ -233,22 +211,34 @@ export abstract class BasePage extends PageHolder {
         const elementText = await this.getText(selector);
         return elementText === text;
       },
-      { timeout, timeoutMsg: `Element does not have text "${text}" after ${timeout} seconds` },
+      {
+        timeout,
+        timeoutMsg: `Element does not have text "${text}" after ${timeout} seconds`,
+      },
     );
   }
 
-  async waitForElementsArrayToBdDisplayed(selector: string | Locator, reverse?: boolean, timeout = TIMEOUT_5_SEC) {
+  async waitForElementsArrayToBdDisplayed(
+    selector: string | Locator, reverse?: boolean, timeout = TIMEOUT_5_SEC,
+  ) {
     await waitUntil(async () => {
       const elements = await this.findElementArray(selector);
       for (const element of elements) {
-        await this.waitForElement(element, { state: reverse ? 'visible' : 'hidden', timeout });
+        await this.waitForElement(element, {
+          state: reverse ? 'visible' : 'hidden',
+          timeout,
+        });
       }
       return true;
     });
   }
 
-  async getCookies(url: string) {
+  async getCookies(url?: string) {
     const cookies = await this.page.context().cookies(url);
     return cookies;
+  }
+
+  async deleteCookies(name: string) {
+    await this.page.context().clearCookies({ name });
   }
 }

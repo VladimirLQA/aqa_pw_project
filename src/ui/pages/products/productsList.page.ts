@@ -39,6 +39,6 @@ export class ProductsListPage extends ListPage {
       this.getText(this['Price by product name'](productName)),
       this.getText(this['Manufacturer by product name'](productName)),
     ]);
-    return { productName, price: +price.replace('$', ''), manufacturer };
+    return { name: productName, price: +price.replace('$', ''), manufacturer };
   }
 }
