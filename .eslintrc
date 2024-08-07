@@ -39,6 +39,7 @@
       4
     ],
     "implicit-arrow-linebreak": "off",
+    "operator-linebreak": ["error", "after"],
     "class-methods-use-this": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",

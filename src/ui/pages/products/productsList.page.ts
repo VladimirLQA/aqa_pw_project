@@ -3,7 +3,8 @@ import { ListPage } from '../list.page';
 export class ProductsListPage extends ListPage {
   readonly uniqueElement = '//h2[.="Products List "]';
 
-  readonly 'Add new product button' = this.findElement('button.page-title-header');
+  readonly 'Add new product button' =
+    this.findElement('button.page-title-header');
 
   // private readonly "Table row selector" = (productName: string) => `//tr[./td[text()="${productName}"]]`;
   readonly 'Name by product name' = (productName: string) =>

@@ -2,11 +2,11 @@ import { expect } from 'playwright/test';
 import { SalesPortalPage } from './salesPortal.page';
 import { services } from '../../api/services';
 import { Users } from '../../utils/storages';
-import map from '../../utils/array/map';
 import { keyMapper } from '../../utils/mapper';
-import forEach from '../../utils/array/forEach';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
+import { forEach } from '../../utils/array/forEach';
+import { map } from '../../utils/array/map';
 
 export class ListPage extends SalesPortalPage {
   protected readonly 'Table row selector' = (entityName: string) =>
@@ -16,34 +16,42 @@ export class ListPage extends SalesPortalPage {
     `${this['Table row selector'](entityName)}/td[5]`;
 
   readonly 'Details button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Details"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}
+      /button[@title="Details"]`);
 
   readonly 'Edit button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Edit"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}
+      /button[@title="Edit"]`);
 
   readonly 'Delete button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Delete"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}
+      /button[@title="Delete"]`);
 
-  readonly 'Table columns names row' = (pageName: string) => this.findElement(`#table-${pageName} thead th`);
+  readonly 'Table columns names row' =
+    (pageName: string) => this.findElement(`#table-${pageName} thead th`);
 
   readonly "Table row values without 'style' attr" = (pageName: string) =>
-    this.findElement(`//table[@id='table-${pageName}']//tbody//tr[not(@style)]`);
+    this.findElement(`//table[@id='table-${pageName}']
+        //tbody//tr[not(@style)]`);
 
   readonly 'Chip buttons' = this.findElement('#chip-buttons .chip');
 
   readonly 'Filter button' = this.findElement('#filter');
 
-  readonly 'Filter checkbox' = (filterName: string) => `//input[@id="${filterName}-filter"]`;
+  readonly 'Filter checkbox' = (filterName: string) =>
+    `//input[@id="${filterName}-filter"]`;
 
   readonly 'Apply button' = this.findElement('#apply-filters');
 
-  readonly 'Search button' = (pageName: string) => this.findElement(`#search-${pageName}`);
+  readonly 'Search button' = (pageName: string) =>
+    this.findElement(`#search-${pageName}`);
 
   readonly 'Search input field' = this.findElement('input[type=search]');
 
-  async getApiMappedData<T extends any>(pageName: string) {
+  async getApiMappedData<T extends { [key: string]: any }>(pageName: string) {
     const data = (await services[pageName]
-      .getAll({ token: Users.getToken() })).data[capitalize(pageName) as TListPageNames];
+      .getAll({ token: Users.getToken() }))
+      .data[capitalize(pageName) as TListPageNames];
 
     return map(data, (entity) => {
       if (entity.price) entity.price = `$${entity.price}`;
@@ -59,17 +67,14 @@ export class ListPage extends SalesPortalPage {
 
     await forEach(tableData, async (entity) => {
       const isQuickFilter: boolean | undefined = quickFilters?.some((qf) =>
-        Object.values(entity)[entity.length - 1] === qf);
-
-      let isSearchFilter: boolean;
-      if (search) {
-        isSearchFilter = Object.values(entity).some((val) =>
-        // @ts-ignore
-          val.toLowerCase().includes(search.toLowerCase()));
-      }
+        Object.values(entity).at(-1) === qf);
+      const isSearchFilter = Object.values(entity).some((val) =>
+        val.toLowerCase().includes((search ?? '').toLowerCase()));
 
       if (search && quickFilters?.length) {
-        if (isQuickFilter && isSearchFilter) filteredAndSearchedData.push(entity);
+        if (isQuickFilter && isSearchFilter) {
+          filteredAndSearchedData.push(entity);
+        }
       } else if (search) {
         if (isSearchFilter) filteredAndSearchedData.push(entity);
       } else if (quickFilters?.length) {
@@ -90,7 +95,6 @@ export class ListPage extends SalesPortalPage {
   async checkQuickFiltersAndClickApplyButton(filters: string[]) {
     await this.checkFiltersBox(filters);
     await this.clickOn(this['Apply button']);
-    // await this.waitForPageIsLoaded();
   }
 
   async checkFiltersBox(labels: string[]) {
@@ -105,22 +109,28 @@ export class ListPage extends SalesPortalPage {
 
   async parseTable(pageName: string) {
     const entities: object[] = [];
-    const columnNames: [...string[]] = (await this['Table columns names row'](pageName)
-      .allInnerTexts()).reduce((names, name, i, arr) => {
-      if (i < arr.length - 2) {
-        names.push(name);
-      }
-      return names;
-    }, []) as string[];
+    const columnNames: [...string[]] =
+      (await this['Table columns names row'](pageName)
+        .allInnerTexts()).reduce((names, name: string, i, arr) => {
+        if (i < arr.length - 2) {
+          // @ts-ignore
+          names.push(name);
+        }
+        return names;
+      }, []) as string[];
 
-    (await (this["Table row values without 'style' attr"](pageName)).allInnerTexts()).forEach((el) => {
+    (await (this["Table row values without 'style' attr"](pageName))
+      .allInnerTexts()).forEach((el) => {
       const values: string[] = [];
       el.split('\t').forEach((v, i, array) => {
         if (i < array.length - 2) {
           values.push(v);
         }
       });
-      entities.push(Object.assign(...columnNames.map((k, idx) => ({ [k]: values[idx] }))));
+      entities.push(Object.assign(
+      // @ts-ignore
+        ...columnNames.map((k, idx) => ({ [k]: values[idx] })),
+      ));
     });
     return entities;
   }
