@@ -26,11 +26,12 @@
     "max-len": [
       "error",
       {
-        "code": 110,
+        "code": 80,
         "tabWidth": 2,
         "ignoreComments": true,
         "ignoreTrailingComments": true,
-        "ignoreUrls": true
+        "ignoreUrls": true,
+         "ignorePattern": "^import\\s.+\\sfrom\\s.+;$"
       }
     ],
     "max-depth": [
