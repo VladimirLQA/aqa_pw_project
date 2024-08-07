@@ -8,7 +8,9 @@ import { AsyncCallback, MaybePromise } from 'types/data/functions.types';
  * @param {AsyncCallback<T,U>} callback A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array. Should returns `boolean` result.
  * @returns {Promise<Array<T>>} filtered array
  */
-export default async function filter<T>(array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, boolean>): Promise<T[]> {
+export const filter = async <T>(
+  array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, boolean>,
+): Promise<T[]> => {
   const awaited: readonly T[] = await array;
   const results: T[] = [];
   for (let index = 0; index < awaited.length; index++) {
@@ -18,4 +20,4 @@ export default async function filter<T>(array: MaybePromise<readonly T[]>, callb
     }
   }
   return results;
-}
+};

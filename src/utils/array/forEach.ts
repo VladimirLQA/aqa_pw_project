@@ -11,7 +11,10 @@ import { MaybePromise, AsyncCallback, Settings } from 'types/data/functions.type
  * @param {Settings} settings - subset of settings, like `serial`
  * @see {@link Settings}
  */
-export default async function forEach<T>(array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, unknown>, settings?: Settings): Promise<void> {
+export const forEach = async <T>(
+  array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, unknown>,
+  settings?: Settings,
+): Promise<void> => {
   const awaited: readonly T[] = await array;
   if (settings?.serial) {
     for (let i = 0; i < awaited.length; i++) {
@@ -20,4 +23,4 @@ export default async function forEach<T>(array: MaybePromise<readonly T[]>, call
   } else {
     await Promise.all(awaited.map(callback));
   }
-}
+};

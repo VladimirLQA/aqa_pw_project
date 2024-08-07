@@ -11,7 +11,10 @@ import { MaybePromise, AsyncCallback, Settings } from 'types/data/functions.type
  * @param {Settings} settings - subset of settings, like `serial`
  * @see {@link Settings}
  */
-export default async function map<T, U>(array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, U>, settings?: Settings) {
+export const map = async <T, U>(
+  array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, U>,
+  settings?: Settings,
+) => {
   const awaited: readonly T[] = await array;
   if (settings?.serial) {
     const mappedArr: U[] = [];
@@ -21,4 +24,4 @@ export default async function map<T, U>(array: MaybePromise<readonly T[]>, callb
     return mappedArr;
   }
   return Promise.all(awaited.map(callback));
-}
+};
