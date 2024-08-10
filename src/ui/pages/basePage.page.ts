@@ -1,10 +1,10 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator } from '@playwright/test';
 import { ElementState, ResizeCoordinates } from 'types/core/actions.types';
 import { TIMEOUT_5_SEC, TIMEOUT_10_SEC } from 'utils/timeouts';
 import { isLocator } from 'utils/typeGuards/selector';
 import { IResponse } from 'types/api/apiClient.types';
 import { logStep } from 'utils/reporter/decorators/logStep';
-import map from '../../utils/array/map';
+import { map } from '../../utils/array/map';
 import { URL } from '../../config/environment';
 import { waitUntil } from '../../utils/utils';
 import { PageHolder } from './pageHolder.page';
@@ -23,7 +23,9 @@ export interface IOptionsWithState extends IOptions {
 
 export abstract class BasePage extends PageHolder {
   findElement(selectorOrElement: string | Locator) {
-    return isLocator(selectorOrElement) ? selectorOrElement : this.page.locator(selectorOrElement);
+    return isLocator(selectorOrElement)
+      ? selectorOrElement
+      : this.page.locator(selectorOrElement);
   }
 
   async findElementArray(selectorOrElement: string | Locator) {
@@ -33,7 +35,10 @@ export abstract class BasePage extends PageHolder {
     return elements;
   }
 
-  async waitForElement(selector: string | Locator, options: IOptionsWithState = { timeout: TIMEOUT_10_SEC }) {
+  async waitForElement(
+    selector: string | Locator,
+    options: IOptionsWithState = { timeout: TIMEOUT_10_SEC },
+  ) {
     const { state, timeout } = options;
 
     const element = this.findElement(selector);
@@ -41,7 +46,9 @@ export abstract class BasePage extends PageHolder {
     return element;
   }
 
-  async waitForElementAndScroll(selector: string | Locator, timeout = TIMEOUT_5_SEC) {
+  async waitForElementAndScroll(
+    selector: string | Locator, timeout = TIMEOUT_5_SEC,
+  ) {
     const element = this.findElement(selector);
     await element.scrollIntoViewIfNeeded({ timeout });
     return element;
@@ -54,9 +61,11 @@ export abstract class BasePage extends PageHolder {
   }
 
   @logStep('Fill value "{value}" into element')
-  async fillValue(selector: string | Locator, text: string, options: TSecretValue = {
-    isSecret: false, timeout: TIMEOUT_5_SEC,
-  }) {
+  async fillValue(
+    selector: string | Locator,
+    text: string,
+    options: TSecretValue = { isSecret: false, timeout: TIMEOUT_5_SEC },
+  ) {
     const { timeout } = options;
     const element = await this.waitForElementAndScroll(selector, timeout);
     if (element) {
@@ -80,22 +89,30 @@ export abstract class BasePage extends PageHolder {
   }
 
   @logStep()
-  async selectDropdownValue(dropdownSelector: string | Locator, optionName: string, timeout?: number) {
+  async selectDropdownValue(
+    dropdownSelector: string | Locator,
+    optionName: string,
+    timeout?: number,
+  ) {
     const dropdown = this.findElement(dropdownSelector);
     await dropdown.selectOption(optionName, { timeout });
   }
 
   @logStep()
   async selectDropdownValueWithKeys(
-    dropdownSelector: string | Locator, options: string | Locator, optionName: string,
+    dropdownSelector: string | Locator,
+    options: string | Locator,
+    optionName: string,
   ) {
     await this.clickOn(dropdownSelector);
     const optionsEl = this.findElementArray(options);
-    const values = await map(optionsEl, async (o) => o.innerText());
+    const values = await map(optionsEl, async (o: Locator) => o.innerText());
 
     const idx = values.indexOf(optionName);
 
-    if (idx === -1) throw Error(`Dropdown option with name '${optionName}' was not found`);
+    if (idx === -1) {
+      throw Error(`Dropdown option with name '${optionName}' was not found`);
+    }
 
     const keys = Array(idx).fill('ArrowDown');
     await this.pressKey([...keys, 'Enter']);
@@ -124,20 +141,30 @@ export abstract class BasePage extends PageHolder {
   }
 
   @logStep()
-  async dragAndDrop(elementSelector: string | Locator, targetSelector: string | Locator, timeout?: number) {
-    const sourceElement = await this.waitForElementAndScroll(elementSelector, timeout);
-    const targetElement = await this.waitForElementAndScroll(targetSelector, timeout);
+  async dragAndDrop(
+    elementSelector: string | Locator,
+    targetSelector: string | Locator,
+    timeout?: number,
+  ) {
+    const sourceElement =
+      await this.waitForElementAndScroll(elementSelector, timeout);
+    const targetElement =
+      await this.waitForElementAndScroll(targetSelector, timeout);
     const sourceElementboundingBox = await sourceElement.boundingBox();
     const targetElementboundingBox = await targetElement.boundingBox();
     if (sourceElementboundingBox && targetElementboundingBox) {
       // Move the mouse to the bottom-right corner
-      await this.page.mouse.move(sourceElementboundingBox.x + 5, sourceElementboundingBox.y + 5);
+      await this.page.mouse.move(
+        sourceElementboundingBox.x + 5, sourceElementboundingBox.y + 5,
+      );
 
       // Press the mouse button to start resizing
       await this.page.mouse.down();
 
       // Move the mouse to the new coordinates to resize the element
-      await this.page.mouse.move(targetElementboundingBox.x, targetElementboundingBox.y);
+      await this.page.mouse.move(
+        targetElementboundingBox.x, targetElementboundingBox.y,
+      );
 
       // Release the mouse button to finish resizing
       await this.page.mouse.up();
@@ -145,7 +172,10 @@ export abstract class BasePage extends PageHolder {
   }
 
   @logStep()
-  async resizeElement(selector: string | Locator, coordinates: ResizeCoordinates) {
+  async resizeElement(
+    selector: string | Locator,
+    coordinates: ResizeCoordinates,
+  ) {
     const element = await this.waitForElementAndScroll(selector);
 
     await this.page.waitForTimeout(1000);
@@ -161,7 +191,9 @@ export abstract class BasePage extends PageHolder {
       await this.page.mouse.down();
 
       // Move the mouse to the new coordinates to resize the element
-      await this.page.mouse.move(rightDownX + coordinates.xOffset, rightDownY + coordinates.yOffset);
+      await this.page.mouse.move(
+        rightDownX + coordinates.xOffset, rightDownY + coordinates.yOffset,
+      );
 
       // Release the mouse button to finish resizing
       await this.page.mouse.up();
@@ -172,9 +204,12 @@ export abstract class BasePage extends PageHolder {
     return this.page.waitForResponse(url);
   }
 
-  async interceptResponse<T>(url: string, triggerAction?: () => Promise<void>): Promise<IResponse<T>> {
+  async interceptResponse<T>(
+    url: string, triggerAction?: () => Promise<void>,
+  ): Promise<IResponse<T>> {
     if (triggerAction) {
-      const [response] = await Promise.all([this.waitForResponse(url), triggerAction()]);
+      const [response] =
+        await Promise.all([this.waitForResponse(url), triggerAction()]);
       return {
         data: (await response.json()) as T,
         status: response.status(),
@@ -205,7 +240,11 @@ export abstract class BasePage extends PageHolder {
   //   );
   // }
 
-  async waitForElementToChangeText(selector: string | Locator, text: string, timeout = TIMEOUT_5_SEC) {
+  async waitForElementToChangeText(
+    selector: string | Locator,
+    text: string,
+    timeout = TIMEOUT_5_SEC,
+  ) {
     await waitUntil(
       async () => {
         const elementText = await this.getText(selector);

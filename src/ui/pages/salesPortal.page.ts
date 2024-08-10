@@ -1,5 +1,4 @@
 import { BasePage } from 'ui/pages/basePage.page';
-import { URL } from 'config/environment';
 import { TIMEOUT_5_SEC } from 'utils/timeouts';
 import { logStep } from 'utils/reporter/decorators/logStep';
 import { UniqueElementProperty } from '../../types/common.types';

@@ -31,15 +31,19 @@
         "ignoreComments": true,
         "ignoreTrailingComments": true,
         "ignoreUrls": true,
-         "ignorePattern": "^import\\s.+\\sfrom\\s.+;$"
+        "ignorePattern": "^\\s*(export\\s+abstract\\s+class\\s+.*|import\\s.+\\sfrom\\s.+;)$",
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
       }
     ],
     "max-depth": [
       "error",
       4
     ],
+    "no-plusplus": 0,
     "implicit-arrow-linebreak": "off",
-    "operator-linebreak": ["error", "after"],
+    "operator-linebreak": ["off"],
     "class-methods-use-this": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",

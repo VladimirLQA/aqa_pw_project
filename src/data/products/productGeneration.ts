@@ -7,7 +7,8 @@ export function generateNewProduct(customProductFields?: Partial<IProduct>) {
     name: faker.commerce.product() + faker.number.int({ min: 1, max: 100000 }),
     price: 100,
     amount: 2,
-    manufacturer: manufacturerNames[generateNumberInRange(0, manufacturerNames.length - 1)],
+    manufacturer:
+      manufacturerNames[generateNumberInRange(0, manufacturerNames.length - 1)],
     notes: 'Test product',
     ...customProductFields,
   };

@@ -7,12 +7,14 @@ import { MaybePromise, AsyncCallback, Settings } from 'types/data/functions.type
  *
  * @template T type of element
  * @param {MaybePromise<T>} array array or async array. Auto wait in case of async array.
- * @param {AsyncCallback<T>} callback - A function that accepts up to three arguments. The map method calls the `callback` function one time for each element in the array.
+ * @param {AsyncCallback<T>} callback - A function that accepts up to three arguments.
+ *  The map method calls the `callback` function one time for each element in the array.
  * @param {Settings} settings - subset of settings, like `serial`
  * @see {@link Settings}
  */
 export const map = async <T, U>(
-  array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, U>,
+  array: MaybePromise<readonly T[]>,
+  callback: AsyncCallback<T, U>,
   settings?: Settings,
 ) => {
   const awaited: readonly T[] = await array;

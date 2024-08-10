@@ -6,7 +6,8 @@ export interface IProduct {
   manufacturer: (typeof manufacturerNames)[number];
 }
 
-export const manufacturerNames = ['Apple', 'Samsung', 'Google', 'Microsoft', 'Sony', 'Xiaomi', 'Amazon', 'Tesla'] as const;
+export const manufacturerNames = ['Apple', 'Samsung', 'Google', 'Microsoft',
+  'Sony', 'Xiaomi', 'Amazon', 'Tesla'] as const;
 
 export interface IProductFromResponse extends IProduct {
   _id: string;
