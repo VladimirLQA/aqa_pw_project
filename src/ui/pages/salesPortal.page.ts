@@ -1,9 +1,7 @@
 import { BasePage } from 'ui/pages/basePage.page';
 import { TIMEOUT_5_SEC } from 'utils/timeouts';
-import { logStep } from 'utils/reporter/decorators/logStep';
-import { UniqueElementProperty } from '../../types/common.types';
 
-export abstract class SalesPortalPage extends BasePage implements UniqueElementProperty {
+export abstract class SalesPortalPage extends BasePage {
   readonly 'Spinner' = this.findElement('.spinner-border');
 
   readonly 'Notification message' = this.findElement('.toast-body');
@@ -28,10 +26,5 @@ export abstract class SalesPortalPage extends BasePage implements UniqueElementP
     const cookies = await this.getCookies();
     const token = cookies.find((cookie) => cookie.name === 'Authorization');
     return token?.value;
-  }
-
-  @logStep('Open Sales Portal')
-  async openSalesPortal() {
-    await this.openPage();
   }
 }

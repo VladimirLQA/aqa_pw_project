@@ -1,11 +1,14 @@
 import { SalesPortalPage } from 'ui/pages/salesPortal.page';
+import { UniqueElementProperty } from '../../types/common.types';
 
-export class HomePage extends SalesPortalPage {
+export class HomePage extends SalesPortalPage implements UniqueElementProperty {
   readonly 'Products view details button' = this.findElement('button#products-from-home');
 
   readonly 'Orders view details button' = this.findElement('button#orders-from-home');
 
   readonly 'Customers view details button' = this.findElement('button#customers-from-home');
+
+  readonly uniqueElement: string = 'div#myCarousel';
 
   readonly 'Sidebar button by name' =
     (name: 'Products' | 'Customers' | 'Orders' | 'Home') =>

@@ -19,16 +19,22 @@ export class LoggedInUsers {
 
   setToken(loginResponse: ILoginResponse, username?: string) {
     username
-      ? (this.findUserByUsername(username).token = this.createTokenFromResponse(loginResponse))
-      : (this.users[this.users.length - 1].token = this.createTokenFromResponse(loginResponse));
+      ? (this.findUserByUsername(username).token =
+         this.createTokenFromResponse(loginResponse))
+      : (this.users[this.users.length - 1].token =
+        this.createTokenFromResponse(loginResponse));
   }
 
   setUser(username: string, loginResponse: ILoginResponse) {
-    this.users.push({ username, token: this.createTokenFromResponse(loginResponse) });
+    this.users.push({
+      username, token: this.createTokenFromResponse(loginResponse),
+    });
   }
 
   getToken(username?: string) {
-    return username ? this.findUserByUsername(username).token : this.users[this.users.length - 1].token;
+    return username
+      ? this.findUserByUsername(username).token
+      : this.users[this.users.length - 1].token;
   }
 
   removeToken(username?: string) {

@@ -1,6 +1,4 @@
-import { ADMIN_USERNAME, ADMIN_PASSWORD } from 'config/environment';
-import { ILoginResponse, IUserCredentials } from 'types/user/user.types';
-import { apiConfig } from 'api/config/apiConfig';
+import { IUserCredentials } from 'types/user/user.types';
 import { SalesPortalPage } from './salesPortal.page';
 
 export class SignInPage extends SalesPortalPage {
@@ -19,9 +17,9 @@ export class SignInPage extends SalesPortalPage {
     await this.clickOn(this['Login button']);
   }
 
-  async clickSignInAndGetTokenFromResponse() {
-    const url = apiConfig.baseURL + apiConfig.endpoints.Login;
-    const response = await this.interceptResponse<ILoginResponse>(url, this.clickSignInButton.bind(this));
-    return response.data.token;
-  }
+  // async clickSignInAndGetTokenFromResponse() {
+  //   const url = apiConfig.baseURL + apiConfig.endpoints.Login;
+  //   const response = await this.interceptResponse<ILoginResponse>(url, this.clickSignInButton.bind(this));
+  //   return response.data.token;
+  // }
 }

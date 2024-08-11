@@ -1,25 +1,26 @@
 import { HomePage } from '../pages/homePage.page';
 import { SignInPage } from '../pages/signInPage.page';
-import { PageHolder } from '../pages/pageHolder.page';
 import { logStep } from '../../utils/reporter/decorators/logStep';
-import { IUserCredentials } from '../../types/user/user.types';
-import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../config/environment';
+import { ILoginResponse, IUserCredentials } from '../../types/user/user.types';
+import { ADMIN_PASSWORD, ADMIN_USERNAME, URL } from '../../config/environment';
 import { Users } from '../../utils/storages';
+import { SalesPortalService } from './salesPortal.service';
+import { apiConfig } from '../../api/config/apiConfig';
 
-export class SignInService extends PageHolder {
+export class SignInService extends SalesPortalService {
   private signInPage = new SignInPage(this.page);
 
   private homePage = new HomePage(this.page);
 
   @logStep('Open sales portal')
   async openSalesPortal() {
-    await this.signInPage.openPage('https://anatoly-karpovich.github.io/aqa-course-project');
+    await this.signInPage.openPage(URL);
   }
 
   @logStep('Sign In')
   async signIn(credentials: IUserCredentials) {
     await this.signInPage.fillCredentialFields(credentials);
-    const token = await this.signInPage.clickSignInAndGetTokenFromResponse();
+    const token = await this.clickSignInAndGetTokenFromResponse();
     Users.setUser(credentials.username, { token });
     await this.homePage.waitForPageIsLoaded();
     await this.homePage.waitForOpened();
@@ -33,5 +34,17 @@ export class SignInService extends PageHolder {
   @logStep('Sign Out')
   async signOut() {
     await this.signInPage.deleteCookies('Authorization');
+  }
+
+  private async clickSignInAndGetTokenFromResponse() {
+    const url = apiConfig.baseURL + apiConfig.endpoints.Login;
+    const response = await this.interceptResponse<ILoginResponse>(
+      url, this.clickSignInButton.bind(this),
+    );
+    return response.data.token;
+  }
+
+  private async clickSignInButton() {
+    await this.signInPage.clickSignInButton();
   }
 }

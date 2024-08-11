@@ -1,22 +1,27 @@
 import { test as base } from '@playwright/test';
-import { Application } from 'fixtures/common/application';
-import { expect } from 'playwright/test';
 import { SalesPortalServices } from '../../api/services';
-import { generateNewProduct } from '../../data/products/productGeneration';
-import { Users } from '../../utils/storages';
-import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
-import { IProductFromResponse } from '../../types/products/product.types';
+import { HomeService } from '../../ui/services/home.service';
+import { ProductsListService } from '../../ui/services/products/products.pageService';
+import { SignInService } from '../../ui/services/signIn.service';
 
 interface PageFactoryFixture {
-  app: Application;
+  productService: ProductsListService;
+  homeService: HomeService;
+  signInService: SignInService;
   services: SalesPortalServices;
   // assert: ;
 
 }
 
 export const baseFixture = base.extend<PageFactoryFixture>({
-  app: async ({ page }, use) => {
-    await use(new Application(page));
+  productService: async ({ page }, use) => {
+    await use(new ProductsListService(page));
+  },
+  homeService: async ({ page }, use) => {
+    await use(new HomeService(page));
+  },
+  signInService: async ({ page }, use) => {
+    await use(new SignInService(page));
   },
   services: async ({}, use) => {
     await use(new SalesPortalServices());

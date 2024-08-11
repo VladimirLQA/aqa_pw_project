@@ -21,7 +21,10 @@ export class CreatedProducts {
     }
   }
 
-  updateProduct(product: IProductFromResponse, productIndex: number = this.products.length - 1) {
+  updateProduct(
+    product: IProductFromResponse,
+    productIndex: number = this.products.length - 1,
+  ) {
     this.products[productIndex] = product;
   }
 
@@ -34,7 +37,8 @@ export class CreatedProducts {
   }
 
   removeProduct(id?: string) {
-    this.products.splice(id ? this.findProductIndexById(id) : this.products.length - 1, 1);
+    this.products.splice(id
+      ? this.findProductIndexById(id) : this.products.length - 1, 1);
   }
 
   private findProductIndexById(productId: string) {

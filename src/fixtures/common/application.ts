@@ -5,11 +5,4 @@ import { HomeService } from '../../ui/services/home.service';
 import { SignInService } from '../../ui/services/signIn.service';
 
 export class Application extends PageHolder {
-  productService = new ProductsListService(this.page);
-
-  homeService = new HomeService(this.page);
-
-  signInService = new SignInService(this.page);
-
-  salePortalSerivce = new SalesPortalService(this.page);
 }
