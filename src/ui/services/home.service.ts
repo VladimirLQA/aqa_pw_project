@@ -14,4 +14,18 @@ export class HomeService extends PageHolder {
     await this.homePage.waitForSpinnerToHide();
     await this.productsListPage.waitForOpened();
   }
+
+  @logStep('Open customers page')
+  async openCustomersPage() {
+    await this.homePage.clickOnViewDetailsButton('Customers');
+    await this.homePage.waitForSpinnerToHide();
+    // await this.customersListPage.waitForOpened();
+  }
+
+  @logStep('Open orders page')
+  async openOrdersPage() {
+    await this.homePage.clickOnViewDetailsButton('Orders');
+    await this.homePage.waitForSpinnerToHide();
+    // await this.ordersListPage.waitForOpened();
+  }
 }

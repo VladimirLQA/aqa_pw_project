@@ -1,16 +1,15 @@
 import { BasePage } from 'ui/pages/basePage.page';
 import { TIMEOUT_5_SEC } from 'utils/timeouts';
 import { logStep } from 'utils/reporter/decorators/logStep';
-import { UniqueElementProperty } from '../../types/common.types';
 
-export abstract class SalesPortalPage extends BasePage implements UniqueElementProperty {
+export abstract class SalesPortalPage extends BasePage {
   readonly 'Spinner' = this.findElement('.spinner-border');
 
   readonly 'Notification message' = this.findElement('.toast-body');
 
   readonly 'Close Notification button' = this.findElement('#toast button');
 
-  readonly uniqueElement: string = 'Provide selector for unique element';
+  protected uniqueElement: string = 'Provide uniqueElement';
 
   async waitForOpened() {
     await this.waitForElement(this.uniqueElement);

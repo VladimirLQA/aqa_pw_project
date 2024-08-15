@@ -1,4 +1,3 @@
-import { expect } from 'playwright/test';
 import { SalesPortalPage } from './salesPortal.page';
 import { services } from '../../api/services';
 import { Users } from '../../utils/storages';
@@ -128,7 +127,7 @@ export class ListPage extends SalesPortalPage {
         }
       });
       entities.push(Object.assign(
-      // @ts-ignore
+        // @ts-ignore
         ...columnNames.map((k, idx) => ({ [k]: values[idx] })),
       ));
     });
@@ -153,19 +152,5 @@ export class ListPage extends SalesPortalPage {
       });
     }
     return chipsFilters;
-  }
-
-  async verifyTableData(pageName: 'products' | 'customers') {
-    let expected = await this.getApiMappedData(pageName);
-    const chips = await this.getListOfChipButtons(pageName);
-    if (chips.search || chips.quickFilters?.length) {
-      expected = await this.getTableDataAfterFilterAndSearch(expected, chips);
-    }
-    const actual = await this.parseTable(pageName);
-    expect(actual.length).toEqual(expected.length);
-
-    for (const e of expected) {
-      expect(actual).toContainEqual(e);
-    }
   }
 }

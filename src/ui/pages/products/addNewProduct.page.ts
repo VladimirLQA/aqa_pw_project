@@ -5,7 +5,6 @@ import { validateResponse } from 'utils/validations/apiValidation';
 import { HTTP_STATUS_CODES } from 'data/http/statusCodes';
 import { Products } from 'utils/storages';
 import { logStep } from 'utils/reporter/decorators/logStep';
-import { NOTIFICATION_MESSAGES } from 'data/notifications';
 
 export class AddNewProductPage extends SalesPortalPage {
   readonly uniqueElement = '//h2[.="Add New Product "]';
@@ -52,7 +51,9 @@ export class AddNewProductPage extends SalesPortalPage {
 
   private async interceptCreateProductResponse() {
     const url = apiConfig.baseURL + apiConfig.endpoints.Products;
-    const response = await this.interceptResponse<IProductResponse>(url, this.clickOnSaveNewProductButton.bind(this));
+    const response = await this.interceptResponse<IProductResponse>(
+      url, this.clickOnSaveNewProductButton.bind(this),
+    );
     validateResponse(response, HTTP_STATUS_CODES.CREATED, true, null);
     return response;
   }

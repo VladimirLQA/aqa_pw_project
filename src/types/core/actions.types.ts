@@ -1,5 +1,3 @@
-import { Locator } from '@playwright/test';
-
 export interface IWaitUntilOptions {
   timeout?: number;
   timeoutMsg?: string;

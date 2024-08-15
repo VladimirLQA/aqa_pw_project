@@ -23,15 +23,15 @@ export class ProductsListPage extends ListPage {
     await this.clickOn(this['Add new product button']);
   }
 
-  async openDetailsModalForCreatedProduct(productName: string) {
+  async clickDetailsButtonForProduct(productName: string) {
     await this.clickOn(this['Details button by entity name'](productName));
   }
 
-  async clickOnEditButtonForCreatedProduct(productName: string) {
+  async clickEditButtonForProduct(productName: string) {
     await this.clickOn(this['Edit button by entity name'](productName));
   }
 
-  async openDeleteModalForCreatedProduct(productName: string) {
+  async clickDeleteButtonForProduct(productName: string) {
     await this.clickOn(this['Delete button by entity name'](productName));
   }
 

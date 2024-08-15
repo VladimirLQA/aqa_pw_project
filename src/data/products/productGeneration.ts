@@ -1,15 +1,14 @@
 import { faker } from '@faker-js/faker';
-import { IProduct, manufacturerNames } from 'types/products/product.types';
-import { generateNumberInRange } from 'utils/number/number';
+import { IProduct, MANUFACTURERS } from 'types/products/product.types';
+import { getRandomObjectValue } from 'utils/number/number';
 
 export function generateNewProduct(customProductFields?: Partial<IProduct>) {
   const product: IProduct = {
     name: faker.commerce.product() + faker.number.int({ min: 1, max: 100000 }),
-    price: 100,
-    amount: 2,
-    manufacturer:
-      manufacturerNames[generateNumberInRange(0, manufacturerNames.length - 1)],
-    notes: 'Test product',
+    price: faker.number.int({ min: 1, max: 99999 }),
+    amount: faker.number.int({ min: 0, max: 999 }),
+    manufacturer: getRandomObjectValue<typeof MANUFACTURERS>(MANUFACTURERS),
+    notes: faker.string.alpha({ length: { min: 5, max: 254 }, casing: 'mixed' }),
     ...customProductFields,
   };
   return product;

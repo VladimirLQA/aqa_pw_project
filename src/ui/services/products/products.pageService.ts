@@ -1,12 +1,12 @@
 import { expect } from 'playwright/test';
-import { PageHolder } from '../../pages/pageHolder.page';
 import { ProductsListPage } from '../../pages/products/productsList.page';
 import { AddNewProductPage } from '../../pages/products/addNewProduct.page';
 import { logStep } from '../../../utils/reporter/decorators/logStep';
 import { IProduct } from '../../../types/products/product.types';
 import { pick } from '../../../utils/utils';
+import { ListService } from '../list.service';
 
-export class ProductsListService extends PageHolder {
+export class ProductsListService extends ListService {
   private productsPage = new ProductsListPage(this.page);
 
   private addNewProductPage = new AddNewProductPage(this.page);
@@ -19,7 +19,9 @@ export class ProductsListService extends PageHolder {
   }
 
   async getExistingProductData(productName: string) {
-    const createdProductData = await this.productsPage.getDataByName(productName);
+    const createdProductData = await this.productsPage.getDataByName(
+      productName,
+    );
     return createdProductData;
   }
 
