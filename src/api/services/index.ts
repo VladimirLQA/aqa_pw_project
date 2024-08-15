@@ -1,7 +1,5 @@
 import productService from 'api/services/product.service';
 import signInService from 'api/services/signIn.service';
-import ProductService from 'api/services/product.service';
-import SignInService from 'api/services/signIn.service';
 
 export class SalesPortalServices {
   SignInService = signInService;
@@ -13,4 +11,4 @@ export const services: Record<string, Services> = {
   products: productService,
 };
 
-export type Services = typeof ProductService;
+export type Services = typeof productService;

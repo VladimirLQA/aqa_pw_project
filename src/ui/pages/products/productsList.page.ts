@@ -35,7 +35,7 @@ export class ProductsListPage extends ListPage {
     await this.clickOn(this['Delete button by entity name'](productName));
   }
 
-  async getDataByName(productName: string) {
+  async getTableDataByName(productName: string) {
     const [price, manufacturer] = await Promise.all([
       this.getText(this['Price by product name'](productName)),
       this.getText(this['Manufacturer by product name'](productName)),

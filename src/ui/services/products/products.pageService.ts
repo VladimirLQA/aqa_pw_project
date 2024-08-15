@@ -18,16 +18,16 @@ export class ProductsListService extends ListService {
     await this.addNewProductPage.waitForOpened();
   }
 
-  async getExistingProductData(productName: string) {
-    const createdProductData = await this.productsPage.getDataByName(
-      productName,
-    );
+  async getTableDataByName(productName: string) {
+    const createdProductData =
+      await this.productsPage.getTableDataByName(productName);
     return createdProductData;
   }
 
   @logStep('Validate product in table')
-  async checkProductInTable(product: IProduct) {
-    const actualProduct = await this.getExistingProductData(product.name);
+  async verifyProductInTable(product: IProduct) {
+    const actualProduct =
+      await this.productsPage.getTableDataByName(product.name);
     const expectedProduct = pick(product, ['name', 'price', 'manufacturer']);
     expect(actualProduct).toMatchObject(expectedProduct);
   }

@@ -1,6 +1,5 @@
 import { BasePage } from 'ui/pages/basePage.page';
 import { TIMEOUT_5_SEC } from 'utils/timeouts';
-import { logStep } from 'utils/reporter/decorators/logStep';
 
 export abstract class SalesPortalPage extends BasePage {
   readonly 'Spinner' = this.findElement('.spinner-border');
@@ -27,10 +26,5 @@ export abstract class SalesPortalPage extends BasePage {
     const cookies = await this.getCookies();
     const token = cookies.find((cookie) => cookie.name === 'Authorization');
     return token?.value;
-  }
-
-  @logStep('Open Sales Portal')
-  async openSalesPortal() {
-    await this.openPage();
   }
 }

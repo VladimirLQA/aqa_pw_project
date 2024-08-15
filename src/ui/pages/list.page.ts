@@ -91,8 +91,7 @@ export class ListPage extends SalesPortalPage {
     await this.clickOn(this['Filter button']);
   }
 
-  async checkQuickFiltersAndClickApplyButton(filters: string[]) {
-    await this.checkFiltersBox(filters);
+  async clickOnApplybutton() {
     await this.clickOn(this['Apply button']);
   }
 
@@ -102,8 +101,8 @@ export class ListPage extends SalesPortalPage {
     }
   }
 
-  async clickOnSearchButton() {
-    await this.clickOn(this['Search button']('products'));
+  async clickOnSearchButton(page: string) {
+    await this.clickOn(this['Search button'](page));
   }
 
   async parseTable(pageName: string) {

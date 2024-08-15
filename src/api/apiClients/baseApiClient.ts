@@ -60,7 +60,10 @@ export abstract class BaseApiClient {
   }
 
   private secureCheck() {
-    fieldsToHideInReport.forEach((fieldToHide) => this.options && hideValueInObject(this.options, fieldToHide));
+    fieldsToHideInReport.forEach(
+      (fieldToHide) =>
+        this.options && hideValueInObject(this.options, fieldToHide),
+    );
   }
 
   private async logRequest() {

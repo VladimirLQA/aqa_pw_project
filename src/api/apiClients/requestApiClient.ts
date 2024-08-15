@@ -5,7 +5,9 @@ import ReporterService from 'utils/reporter/reporters/reporter';
 class RequestApiClient extends BaseApiClient {
   protected async send() {
     const apiContext = await request.newContext();
-    const resp = await apiContext.fetch(this.options!.url, this.options!.options);
+    const resp = await apiContext.fetch(
+      this.options!.url, this.options!.options,
+    );
     apiContext.dispose();
     return resp;
   }
