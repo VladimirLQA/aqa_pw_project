@@ -1,5 +1,7 @@
+import { Locator } from '@playwright/test';
 import { IWaitUntilOptions } from '../types/core/actions.types';
 import { TIMEOUT_10_SEC } from './timeouts';
+import { isLocator } from './typeGuards/selector';
 
 export const delay = async (timeout: number) =>
   new Promise((resolve) => { setTimeout(resolve, timeout); });
@@ -70,3 +72,10 @@ export const omit = <T extends {}, K extends keyof T>
   (object: T, keys: K[]): Pick<T, K> =>
     pickFunc(object, (k) => !(Array.isArray(keys)
       ? keys : [keys]).includes(k as K));
+
+export const getElementSelector = (item: Locator | string) => {
+  if (isLocator(item)) {
+    return item._selector;
+  }
+  return item;
+};

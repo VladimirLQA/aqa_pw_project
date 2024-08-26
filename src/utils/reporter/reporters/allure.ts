@@ -42,8 +42,7 @@ class AllureReporter extends BaseReporter {
   }
 
   attachLog(log: string) {
-    // allure.addAttachment("Test Log", log, "text/plain");
-    // TBD
+    allure.attachment('Test logs', log, 'text/plain');
   }
 
   clearReportResults() {

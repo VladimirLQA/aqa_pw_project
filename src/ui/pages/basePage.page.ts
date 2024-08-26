@@ -60,7 +60,7 @@ export abstract class BasePage extends PageHolder {
     await element.click({ timeout });
   }
 
-  @logStep('Fill value "{value}" into element')
+  @logStep('Fill value "{value}" into element with {selector}')
   async fillValue(
     selector: string | Locator,
     text: string,
@@ -192,7 +192,8 @@ export abstract class BasePage extends PageHolder {
 
       // Move the mouse to the new coordinates to resize the element
       await this.page.mouse.move(
-        rightDownX + coordinates.xOffset, rightDownY + coordinates.yOffset,
+        rightDownX + coordinates.xOffset,
+        rightDownY + coordinates.yOffset,
       );
 
       // Release the mouse button to finish resizing
@@ -205,7 +206,8 @@ export abstract class BasePage extends PageHolder {
   }
 
   async interceptResponse<T>(
-    url: string, triggerAction?: () => Promise<void>,
+    url: string,
+    triggerAction?: () => Promise<void>,
   ): Promise<IResponse<T>> {
     if (triggerAction) {
       const [response] =
@@ -258,7 +260,9 @@ export abstract class BasePage extends PageHolder {
   }
 
   async waitForElementsArrayToBdDisplayed(
-    selector: string | Locator, reverse?: boolean, timeout = TIMEOUT_5_SEC,
+    selector: string | Locator,
+    reverse?: boolean,
+    timeout = TIMEOUT_5_SEC,
   ) {
     await waitUntil(async () => {
       const elements = await this.findElementArray(selector);

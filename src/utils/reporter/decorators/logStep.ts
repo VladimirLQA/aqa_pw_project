@@ -19,9 +19,9 @@ import { hideSecretData } from '../../string';
 export const logStep = <This, Args extends any[], Return>(message?: string) =>
   function actualDecorator(
     target: (this: This, ...args: Args) => Promise<Return>,
-    context: ClassMethodDecoratorContext<This, (
-      this: This, ...args: Args
-    ) => Promise<Return>>,
+    context: ClassMethodDecoratorContext<
+    This, (this: This, ...args: Args) => Promise<Return>
+    >,
   ) {
     function replacementMethod(this: any, ...args: Args) {
       const [selector, value, ...options] = args;
@@ -30,7 +30,9 @@ export const logStep = <This, Args extends any[], Return>(message?: string) =>
       );
 
       const stepName = message
-        ? message.replace('{value}', `${isSecretObj?.isSecret ? hideSecretData(value) : value}`)
+        ? message
+          .replace('{value}', `${isSecretObj?.isSecret ? hideSecretData(value) : value}`)
+          .replace('{selector}', selector)
         : `${this.constructor.name}.${context.name as string}`;
 
       return test.step(stepName, async () => target.call(this, ...args), {

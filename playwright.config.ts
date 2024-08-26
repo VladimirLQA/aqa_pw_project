@@ -1,9 +1,8 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from '@playwright/test';
 
-import * as dotenv from "dotenv";
-import { URL } from "./environment";
-import { apiConfig } from "api/config/apiConfig";
-import suite from "./suites";
+import * as dotenv from 'dotenv';
+import { URL } from './src/config/environment';
+import suite from './src/config/suites';
 
 dotenv.config();
 /**
@@ -17,8 +16,8 @@ dotenv.config();
  */
 export default defineConfig({
   // globalSetup: require.resolve("./global-setup"),
-  updateSnapshots: "missing",
-  testDir: "src/tests",
+  updateSnapshots: 'missing',
+  testDir: 'src/tests',
   testMatch: suite,
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -31,10 +30,10 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     [
-      "allure-playwright",
+      'allure-playwright',
       {
         detail: true,
-        outputFolder: "src/report/allure-results",
+        outputFolder: 'src/report/allure-results',
         suiteTitle: false,
       },
     ],
@@ -45,24 +44,24 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    trace: 'on-first-retry',
 
     /* Screenshot on failure. */
-    screenshot: "only-on-failure",
+    screenshot: 'only-on-failure',
     // baseURL: process.env.TESTS === "UI" ? URL : apiConfig.baseURL,
     baseURL: URL,
     launchOptions: {
-      args: ["--start-maximized"],
+      args: ['--start-maximized'],
     },
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: 'chromium',
       use: {
         // ...devices["Desktop Chrome"],
-        headless: process.env.HEADLESS === "true",
+        headless: process.env.HEADLESS === 'true',
         viewport: null,
       },
     },
