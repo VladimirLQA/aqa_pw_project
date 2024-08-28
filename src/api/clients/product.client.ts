@@ -3,10 +3,12 @@ import {
   IProduct, IProductFromResponse, IProductResponse, IProductsResponse,
 } from 'types/products/product.types';
 import { apiConfig } from 'api/config/apiConfig';
-import apiClient from 'api/apiClients/apiClient';
+import apiClient from 'api/request/request-index';
 import { logStep } from 'utils/reporter/decorators/logStep';
 
-class ProductsService {
+class ProductsClient {
+  constructor(private client = apiClient) {}
+
   @logStep('Get product via API')
   async getById(params: RequestParams<Id>) {
     const options: IRequestOptions = {
@@ -17,7 +19,7 @@ class ProductsService {
       },
       requestType: 'json',
     };
-    return apiClient.sendRequest<IProductResponse>(options);
+    return this.client.sendRequest<IProductResponse>(options);
   }
 
   @logStep('Get all products via API')
@@ -30,7 +32,7 @@ class ProductsService {
       },
       requestType: 'json',
     };
-    return apiClient.sendRequest<IProductsResponse>(options);
+    return this.client.sendRequest<IProductsResponse>(options);
   }
 
   @logStep('Create product via API')
@@ -44,7 +46,7 @@ class ProductsService {
       },
       requestType: 'json',
     };
-    return apiClient.sendRequest<IProductResponse>(options);
+    return this.client.sendRequest<IProductResponse>(options);
   }
 
   @logStep('Update product via API')
@@ -58,7 +60,7 @@ class ProductsService {
       },
       requestType: 'json',
     };
-    return apiClient.sendRequest<IProductResponse>(options);
+    return this.client.sendRequest<IProductResponse>(options);
   }
 
   @logStep('Delete product via API')
@@ -72,8 +74,8 @@ class ProductsService {
       },
       requestType: 'json',
     };
-    return apiClient.sendRequest<null>(options);
+    return this.client.sendRequest<null>(options);
   }
 }
 
-export default new ProductsService();
+export default new ProductsClient();

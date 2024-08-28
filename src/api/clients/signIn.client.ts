@@ -1,10 +1,12 @@
 import { IRequestOptions, RequestParams } from 'types/api/apiClient.types';
 import { ILoginResponse, IUserCredentials } from 'types/user/user.types';
 import { apiConfig } from 'api/config/apiConfig';
-import apiClient from 'api/apiClients/apiClient';
+import apiClient from 'api/request/request-index';
 import { logStep } from 'utils/reporter/decorators/logStep';
 
-class SignInService {
+class SignInClient {
+  constructor(private client = apiClient) {}
+
   @logStep('Sign in via API')
   async login(params: RequestParams<IUserCredentials>) {
     const options: IRequestOptions = {
@@ -16,7 +18,7 @@ class SignInService {
       },
       requestType: 'json',
     };
-    return apiClient.sendRequest<ILoginResponse>(options);
+    return this.client.sendRequest<ILoginResponse>(options);
   }
 }
-export default new SignInService();
+export default new SignInClient();

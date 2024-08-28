@@ -1,14 +1,14 @@
 import { test as base } from '@playwright/test';
-import { SalesPortalServices } from 'api/services/index';
+import { ApiClients } from 'api/clients/index';
+import signInClient from '../../api/clients/signIn.client';
+import productClient from '../../api/clients/product.client';
 
-interface ServicesFixture {
-  services: SalesPortalServices;
-}
+export const test = base.extend<ApiClients>({
+  SignInClient: async ({}, use) => {
+    await use(signInClient);
+  },
 
-export const test = base.extend<ServicesFixture>({
-  services: async ({}, use) => {
-    await use(new SalesPortalServices());
+  ProductsClient: async ({}, use) => {
+    await use(productClient);
   },
 });
-
-// export { expect } from "@playwright/test";

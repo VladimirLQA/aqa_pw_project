@@ -1,5 +1,5 @@
 import { SalesPortalPage } from './salesPortal.page';
-import { services } from '../../api/services';
+import { services } from '../../api/clients';
 import { Users } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';

@@ -1,5 +1,5 @@
 import { request } from '@playwright/test';
-import { BaseApiClient } from 'api/apiClients/baseApiClient';
+import { BaseApiClient } from 'api/request/request-base';
 import ReporterService from 'utils/reporter/reporters/reporter';
 
 class RequestApiClient extends BaseApiClient {

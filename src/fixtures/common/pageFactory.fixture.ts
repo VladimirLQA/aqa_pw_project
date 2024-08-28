@@ -1,5 +1,4 @@
 import { test as base } from '@playwright/test';
-import { SalesPortalServices } from '../../api/services';
 import { HomeService } from '../../ui/services/home.service';
 import { ProductsListService } from '../../ui/services/products/products.pageService';
 import { SignInService } from '../../ui/services/signIn.service';
@@ -8,7 +7,6 @@ interface PageFactoryFixture {
   productService: ProductsListService;
   homeService: HomeService;
   signInService: SignInService;
-  services: SalesPortalServices;
   // assert: ;
 
 }
@@ -22,9 +20,6 @@ export const baseFixture = base.extend<PageFactoryFixture>({
   },
   signInService: async ({ page }, use) => {
     await use(new SignInService(page));
-  },
-  services: async ({}, use) => {
-    await use(new SalesPortalServices());
   },
 });
 
