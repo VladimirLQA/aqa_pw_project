@@ -1,5 +1,5 @@
 import { SalesPortalPage } from './salesPortal.page';
-import { services } from '../../api/clients';
+import { clients } from '../../api/clients';
 import { Users } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
@@ -48,7 +48,7 @@ export class ListPage extends SalesPortalPage {
   readonly 'Search input field' = this.findElement('input[type=search]');
 
   async getApiMappedData<T extends { [key: string]: any }>(pageName: string) {
-    const data = (await services[pageName]
+    const data = (await clients[pageName]
       .getAll({ token: Users.getToken() }))
       .data[capitalize(pageName) as TListPageNames];
 
@@ -110,26 +110,26 @@ export class ListPage extends SalesPortalPage {
     const columnNames: [...string[]] =
       (await this['Table columns names row'](pageName)
         .allInnerTexts()).reduce((names, name: string, i, arr) => {
-        if (i < arr.length - 2) {
-          // @ts-ignore
-          names.push(name);
-        }
-        return names;
-      }, []) as string[];
+          if (i < arr.length - 2) {
+            // @ts-ignore
+            names.push(name);
+          }
+          return names;
+        }, []) as string[];
 
     (await (this["Table row values without 'style' attr"](pageName))
       .allInnerTexts()).forEach((el) => {
-      const values: string[] = [];
-      el.split('\t').forEach((v, i, array) => {
-        if (i < array.length - 2) {
-          values.push(v);
-        }
+        const values: string[] = [];
+        el.split('\t').forEach((v, i, array) => {
+          if (i < array.length - 2) {
+            values.push(v);
+          }
+        });
+        entities.push(Object.assign(
+          // @ts-ignore
+          ...columnNames.map((k, idx) => ({ [k]: values[idx] })),
+        ));
       });
-      entities.push(Object.assign(
-        // @ts-ignore
-        ...columnNames.map((k, idx) => ({ [k]: values[idx] })),
-      ));
-    });
     return entities;
   }
 

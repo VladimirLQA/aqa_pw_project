@@ -31,3 +31,8 @@ export type Id = {
 //   data: T;
 //   token?: string;
 // }
+
+export interface IResponseFields {
+  IsSuccess: boolean;
+  ErrorMessage: string | null;
+}
