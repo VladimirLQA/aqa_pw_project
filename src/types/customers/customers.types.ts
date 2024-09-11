@@ -1,10 +1,9 @@
-import { TGetObjectValues } from '../common.types';
 import { IResponseFields } from '../api/apiClient.types';
 
 export interface ICustomer {
   email: string;
   name: string;
-  country: TGetObjectValues<typeof COUNTRY>;
+  country: TCountry;
   street: string;
   flat: number;
   city: string;
@@ -35,4 +34,6 @@ export const COUNTRY = {
   FRANCE: 'France',
   GREATE_BRITAIN: 'Great Britain',
   RUSSIA: 'Russia',
-};
+} as const;
+
+export type TCountry = typeof COUNTRY[keyof typeof COUNTRY];

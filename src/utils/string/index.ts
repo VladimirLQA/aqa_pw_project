@@ -1,3 +1,1 @@
-import { hideSecretData } from 'utils/string/secretData';
-
-export { hideSecretData };
+export const hideSecretData = (text: string) => text.replace(/./g, '*');

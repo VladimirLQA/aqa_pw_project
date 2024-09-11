@@ -33,6 +33,7 @@ export const logStep = <This, Args extends any[], Return>(message?: string) =>
         ? message
           .replace('{value}', `${isSecretObj?.isSecret ? hideSecretData(value) : value}`)
           .replace('{selector}', selector)
+          .replace('{amount}', value)
         : `${this.constructor.name}.${context.name as string}`;
 
       return test.step(stepName, async () => target.call(this, ...args), {

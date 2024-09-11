@@ -1,4 +1,4 @@
-import { AsyncCallback, MaybePromise } from 'types/data/functions.types';
+import { AsyncCallback, MaybePromise } from 'types/utils/functions.types';
 
 /**
  * Returns the elements of an array that meet the condition specified in a callback function.
