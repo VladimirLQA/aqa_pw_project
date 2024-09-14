@@ -17,7 +17,7 @@ export class AddNewProductService extends SalesPortalService {
   async createProduct(product: IProduct) {
     await this.addNewProductPage.fillProductInputs(product);
     const response = await this.interceptCreateProductResponse();
-    await this.waitForSpinnerToHide();
+    await this.salesPortalPage.waitForSpinnerToHide();
     await this.productsPage.waitForOpened();
     Products.addProduct(response.data.Product);
   }
@@ -28,7 +28,8 @@ export class AddNewProductService extends SalesPortalService {
 
   private async interceptCreateProductResponse() {
     const url = apiConfig.baseURL + apiConfig.endpoints.Products;
-    const response = await this.interceptResponse<IProductResponse>(
+    const response = await this.salesPortalPage
+      .interceptResponse<IProductResponse>(
       url, this.clickOnSaveNewProductButton.bind(this),
     );
     validateResponse(response, HTTP_STATUS_CODES.CREATED, true, null);

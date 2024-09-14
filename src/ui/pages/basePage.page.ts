@@ -35,6 +35,13 @@ export abstract class BasePage extends PageHolder {
     return elements;
   }
 
+  async waitForElementArray(
+    selectorOrElement: string | Locator, timeout = TIMEOUT_5_SEC,
+  ) {
+    const elements = await this.findElementArray(selectorOrElement);
+    return elements;
+  }
+
   async waitForElement(
     selector: string | Locator,
     options: IOptionsWithState = { timeout: TIMEOUT_10_SEC },

@@ -1,7 +1,7 @@
 import { BasePage } from 'ui/pages/basePage.page';
 import { TIMEOUT_5_SEC } from 'utils/timeouts';
 
-export abstract class SalesPortalPage extends BasePage {
+export class SalesPortalPage extends BasePage {
   readonly 'Spinner' = this.findElement('.spinner-border');
 
   readonly 'Notification message' = this.findElement('.toast-body');

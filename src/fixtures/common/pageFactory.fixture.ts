@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
 import { HomeService } from '../../ui/services/home.service';
-import { ProductsListService } from '../../ui/services/products/products.pageService';
+import { ProductsListService } from '../../ui/services/products/products.service';
 import { SignInService } from '../../ui/services/signIn.service';
 
 interface PageFactoryFixture {

@@ -12,7 +12,7 @@ import { MaybePromise, AsyncCallback, Settings } from 'types/utils/functions.typ
  * @param {Settings} settings - subset of settings, like `serial`
  * @see {@link Settings}
  */
-export const map = async <T, U>(
+export const asyncMap = async <T, U>(
   array: MaybePromise<readonly T[]>,
   callback: AsyncCallback<T, U>,
   settings?: Settings,

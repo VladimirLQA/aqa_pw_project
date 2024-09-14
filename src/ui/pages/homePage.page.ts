@@ -1,7 +1,6 @@
 import { SalesPortalPage } from 'ui/pages/salesPortal.page';
-import { UniqueElementProperty } from '../../types/common.types';
 
-export class HomePage extends SalesPortalPage implements UniqueElementProperty {
+export class HomePage extends SalesPortalPage {
   readonly 'Products view details button' = this.findElement('button#products-from-home');
 
   readonly 'Orders view details button' = this.findElement('button#orders-from-home');
