@@ -2,6 +2,14 @@ export const keysForMapping: { [key: string]: string } = {
   name: 'Name',
   manufacturer: 'Manufacturer',
   price: 'Price',
+  email: 'Email',
+  country: 'Country',
+  city: 'City',
+  street: 'Street',
+  house: 'House',
+  flat: 'Flat',
+  phone: 'Phone',
+  notes: 'Notes',
 };
 
 export const componentKeys: { [key: string]: string[] } = {
