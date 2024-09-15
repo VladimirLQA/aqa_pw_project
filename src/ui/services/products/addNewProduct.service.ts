@@ -2,7 +2,7 @@ import { ProductsListPage } from '../../pages/products/productsList.page';
 import { AddNewProductPage } from '../../pages/products/addNewProduct.page';
 import { SalesPortalService } from '../salesPortal.service';
 import { IProduct, IProductResponse } from '../../../types/products/product.types';
-import { Products } from '../../../utils/storages/index';
+import { ProductsStorage } from '../../../utils/storages/index';
 import { logStep } from '../../../utils/reporter/decorators/logStep';
 import { apiConfig } from '../../../api/config/apiConfig';
 import { HTTP_STATUS_CODES } from '../../../data/http/statusCodes';
@@ -19,7 +19,7 @@ export class AddNewProductService extends SalesPortalService {
     const response = await this.interceptCreateProductResponse();
     await this.salesPortalPage.waitForSpinnerToHide();
     await this.productsPage.waitForOpened();
-    Products.addProduct(response.data.Product);
+    ProductsStorage.addEntity(response.data.Product);
   }
 
   private async clickOnSaveNewProductButton() {

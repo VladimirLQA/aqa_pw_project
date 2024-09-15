@@ -3,7 +3,7 @@ import { SignInPage } from '../pages/signInPage.page';
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import { ILoginResponse, IUserCredentials } from '../../types/user/user.types';
 import { ADMIN_PASSWORD, ADMIN_USERNAME, URL } from '../../config/environment';
-import { Users } from '../../utils/storages';
+import { UsersStorage } from '../../utils/storages';
 import { SalesPortalService } from './salesPortal.service';
 import { apiConfig } from '../../api/config/apiConfig';
 
@@ -21,7 +21,7 @@ export class SignInService extends SalesPortalService {
   async signIn(credentials: IUserCredentials) {
     await this.signInPage.fillCredentialFields(credentials);
     const token = await this.clickSignInAndGetTokenFromResponse();
-    Users.setUser(credentials.username, { token });
+    UsersStorage.setUser(credentials.username, { token });
     await this.homePage.waitForPageIsLoaded();
     await this.homePage.waitForOpened();
   }
