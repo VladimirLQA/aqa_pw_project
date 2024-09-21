@@ -2,7 +2,7 @@ import { IProduct, IProductResponse } from 'types/products/product.types';
 import { SalesPortalPage } from 'ui/pages/salesPortal.page';
 import { validateResponse } from 'utils/validations/apiValidation';
 import { HTTP_STATUS_CODES } from 'data/http/statusCodes';
-import { Products } from 'utils/storages';
+import { ProductsStorage } from 'utils/storages';
 import { logStep } from 'utils/reporter/decorators/logStep';
 import { apiConfig } from '../../../api/config/apiConfig';
 
@@ -41,7 +41,7 @@ export class AddNewProductPage extends SalesPortalPage {
     const response = await this.interceptCreateProductResponse();
     await this.waitForSpinnerToHide();
     // await this.verifyAndCloseNotification(NOTIFICATION_MESSAGES.PRODUCT_CREATED);
-    Products.addProduct(response.data.Product);
+    ProductsStorage.addEntity(response.data.Product);
   }
 
   private async interceptCreateProductResponse() {

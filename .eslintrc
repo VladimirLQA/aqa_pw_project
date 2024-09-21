@@ -55,6 +55,7 @@
     "import/no-extraneous-dependencies": "off",
     "no-constructor-return": "off",
     "no-underscore-dangle": "off",
+    "no-param-reassign": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {

@@ -2,11 +2,11 @@ import { clients } from '../clients/index';
 import { ADMIN_USERNAME, ADMIN_PASSWORD } from '../../config/environment';
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import { UsersStorage } from '../../utils/storages';
-
+// TODO refactor with oop
 class SignInApiService {
   private token: string | null = null;
 
-  constructor(private client = clients.signIn) { }
+  constructor(private client = clients.signIn) {}
 
   @logStep('Sign in as Admin via API')
   async signInAsAdminApi() {

@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { Customers } from '../../utils/storages/index';
+import { CustomersStorage } from '../../utils/storages/index';
 import { generateNewCustomer } from '../../data/customers/generateNewCustomer';
 import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 import { logStep } from '../../utils/reporter/decorators/logStep';
@@ -18,17 +18,16 @@ export class CustomersApiService {
       const cutomerToCreate = generateNewCustomer();
       const createdCustomer = await this.client.create(cutomerToCreate, token);
 
-      //   expect(createdCustomer.status).toBe(HTTP_STATUS_CODES.CREATED);
-
-      Customers.add(createdCustomer.data.Customer);
+      expect(createdCustomer.status).toBe(HTTP_STATUS_CODES.CREATED);
+      CustomersStorage.addEntity(createdCustomer.data.Customer);
     }
   }
 
-  @logStep('Create {amount} customers')
+  @logStep('Delete customer')
   async deleteCreatedCustomers() {
     const token = await signInApiService.signInAsAdminApi();
 
-    for (const customer of Customers.getAll()) {
+    for (const customer of CustomersStorage.getAllEntities()) {
       const response = await this.client.delete(customer._id, token);
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     }

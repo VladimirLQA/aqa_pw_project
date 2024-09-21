@@ -1,11 +1,11 @@
 import { SalesPortalPage } from './salesPortal.page';
 import { clients } from '../../api/clients';
-import { Users } from '../../utils/storages';
+import { UsersStorage } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
 import { forEach } from '../../utils/array/forEach';
-import { map } from '../../utils/array/map';
+import { asyncMap } from '../../utils/array/map';
 
 export class ListPage extends SalesPortalPage {
   protected readonly 'Table row selector' = (entityName: string) =>
@@ -47,17 +47,17 @@ export class ListPage extends SalesPortalPage {
 
   readonly 'Search input field' = this.findElement('input[type=search]');
 
-  async getApiMappedData<T extends { [key: string]: any }>(
+  async getApiMappedData(
     pageName: keyof typeof clients,
   ) {
     const data = (await clients[pageName]
       // @ts-ignore
-      .getAll({ token: Users.getToken() }))
+      .getAll({ token: UsersStorage.getToken() }))
       .data[capitalize(pageName) as TListPageNames];
 
-    return map(data, (entity) => {
+    return asyncMap(data, (entity: { [key: string]: any }) => {
       if (entity.price) entity.price = `$${entity.price}`;
-      return keyMapper<T>(entity, pageName);
+      return keyMapper(entity, pageName);
     });
   }
 
