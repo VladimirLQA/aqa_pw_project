@@ -22,6 +22,7 @@ export class AddNewProductService extends SalesPortalService {
     ProductsStorage.addEntity(response.data.Product);
   }
 
+  @logStep('Click on "Save new" button')
   private async clickOnSaveNewProductButton() {
     await this.addNewProductPage.clickOnSaveNewProductButton();
   }
@@ -32,7 +33,12 @@ export class AddNewProductService extends SalesPortalService {
       .interceptResponse<IProductResponse>(
       url, this.clickOnSaveNewProductButton.bind(this),
     );
-    validateResponse(response, HTTP_STATUS_CODES.CREATED, true, null);
+    validateResponse({
+      response,
+      status: HTTP_STATUS_CODES.CREATED,
+      IsSuccess: true,
+      ErrorMessage: null,
+    });
     return response;
   }
 

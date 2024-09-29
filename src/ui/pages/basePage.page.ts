@@ -4,10 +4,11 @@ import { TIMEOUT_5_SEC, TIMEOUT_10_SEC } from 'utils/timeouts';
 import { isLocator } from 'utils/typeGuards/selector';
 import { IResponse } from 'types/api/apiClient.types';
 import { logStep } from 'utils/reporter/decorators/logStep';
-import { map } from '../../utils/array/map';
+import { asyncMap } from '../../utils/array/map';
 import { URL } from '../../config/environment';
 import { waitUntil } from '../../utils/utils';
 import { PageHolder } from './pageHolder.page';
+import { asyncForEach } from '../../utils/array/forEach';
 
 export interface IOptions {
   timeout?: number;
@@ -36,9 +37,14 @@ export abstract class BasePage extends PageHolder {
   }
 
   async waitForElementArray(
-    selectorOrElement: string | Locator, timeout = TIMEOUT_5_SEC,
+    selectorOrElement: string | Locator,
+    options: IOptionsWithState = { timeout: TIMEOUT_10_SEC },
   ) {
+    const { state, timeout } = options;
     const elements = await this.findElementArray(selectorOrElement);
+    await asyncForEach(elements, async (element) => {
+      await element.waitFor({ state, timeout });
+    });
     return elements;
   }
 
@@ -113,7 +119,9 @@ export abstract class BasePage extends PageHolder {
   ) {
     await this.clickOn(dropdownSelector);
     const optionsEl = this.findElementArray(options);
-    const values = await map(optionsEl, async (o: Locator) => o.innerText());
+    const values = await asyncMap(
+      optionsEl, async (o: Locator) => o.innerText(),
+    );
 
     const idx = values.indexOf(optionName);
 

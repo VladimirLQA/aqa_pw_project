@@ -11,7 +11,7 @@ import { MaybePromise, AsyncCallback, Settings } from 'types/utils/functions.typ
  * @param {Settings} settings - subset of settings, like `serial`
  * @see {@link Settings}
  */
-export const forEach = async <T>(
+export const asyncForEach = async <T>(
   array: MaybePromise<readonly T[]>, callback: AsyncCallback<T, unknown>,
   settings?: Settings,
 ): Promise<void> => {

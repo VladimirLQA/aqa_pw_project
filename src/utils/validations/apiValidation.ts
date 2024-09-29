@@ -1,15 +1,26 @@
 import Ajv from 'ajv';
 import { expect } from '@playwright/test';
-import { IResponse } from '../../types/api/apiClient.types';
+import { IResponse, IResponseFields } from '../../types/api/apiClient.types';
 import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
+import { TGetObjectValues } from '../../types/common.types';
 
-export const validateResponse = (
-  response: IResponse, status: HTTP_STATUS_CODES,
-  IsSuccess?: boolean, ErrorMessage?: null | string,
-) => {
-  expect(response.status).toBe(status);
-  if (IsSuccess) expect(response.data.IsSuccess).toBe(IsSuccess);
-  if (ErrorMessage) expect(response.data.ErrorMessage).toBe(ErrorMessage);
+export interface IValidateResponse extends Partial<IResponseFields> {
+  response: IResponse;
+  status: TGetObjectValues<typeof HTTP_STATUS_CODES>;
+}
+
+export interface IValidateResponseSchema extends IValidateResponse {
+  schema: object;
+}
+
+export const validateResponse = (info: IValidateResponse) => {
+  expect(info.response.status).toBe(info.status);
+  if (info.IsSuccess) {
+    expect(info.response.data.IsSuccess).toBe(info.IsSuccess);
+  }
+  if (info.ErrorMessage) {
+    expect(info.response.data.ErrorMessage).toBe(info.ErrorMessage);
+  }
 };
 
 export const validateSchema = (response: IResponse, schema: object) => {
@@ -22,10 +33,12 @@ export const validateSchema = (response: IResponse, schema: object) => {
   expect(isValidSchema).toBe(true);
 };
 
-export const validateResponseWithSchema = (
-  response: IResponse, schema: object, status: number,
-  IsSuccess?: boolean, ErrorMessage?: null | string,
-) => {
-  validateSchema(response, schema);
-  validateResponse(response, status, IsSuccess, ErrorMessage);
+export const validateResponseWithSchema = (info: IValidateResponseSchema) => {
+  validateSchema(info.response, info.schema);
+  validateResponse({
+    response: info.response,
+    status: info.status,
+    IsSuccess: info.IsSuccess,
+    ErrorMessage: info.ErrorMessage,
+  });
 };
