@@ -31,4 +31,16 @@ export class ProductsListService extends ListService {
     const expectedProduct = pick(product, ['name', 'price', 'manufacturer']);
     expect(actualProduct).toMatchObject(expectedProduct);
   }
+
+  @logStep('Click on filter button')
+  async clickOnFilterButton() {
+    await this.productsPage.clickOnFilterButton();
+  }
+
+  @logStep('Apply quick filters')
+  async apllyQuickFilters(filters: string[]) {
+    await this.productsPage.checkFiltersBox(filters);
+    await this.productsPage.clickOnApplybutton();
+    await this.productsPage.clickOnSearchButton('products');
+  }
 }

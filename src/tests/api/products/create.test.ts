@@ -12,26 +12,29 @@ test.describe('[API]. [Products]', () => {
   let token: string = '';
 
   test.beforeAll(async ({ SignInClient }) => {
-    const signInResponse = await SignInClient.login(
-      { data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD } },
-    );
+    const signInResponse = await SignInClient.login({
+      data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD },
+    });
     token = signInResponse.data.token;
   });
 
   test('Create smoke product', async ({ ProductsClient }) => {
     const productData = generateNewProduct();
-    const productResponse = await ProductsClient
-      .create({ data: productData, token });
-    createdProducts.push(productResponse.data.Product);
-    validateResponseWithSchema(
-      productResponse,
-      createdProductSchema,
-      HTTP_STATUS_CODES.CREATED,
-      true,
-      null,
+    const productResponse = await ProductsClient.create(
+      { data: productData, token },
     );
-    expect(productResponse.data.Product)
-      .toMatchObject({ ...productData, _id: productResponse.data.Product._id });
+    createdProducts.push(productResponse.data.Product);
+    validateResponseWithSchema({
+      response: productResponse,
+      schema: createdProductSchema,
+      status: HTTP_STATUS_CODES.CREATED,
+      IsSuccess: true,
+      ErrorMessage: null,
+    });
+    expect(productResponse.data.Product).toMatchObject({
+      ...productData,
+      _id: productResponse.data.Product._id,
+    });
   });
 
   test.afterAll(async ({ ProductsClient }) => {

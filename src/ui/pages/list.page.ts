@@ -4,7 +4,7 @@ import { UsersStorage } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
-import { forEach } from '../../utils/array/forEach';
+import { asyncForEach } from '../../utils/array/forEach';
 import { asyncMap } from '../../utils/array/map';
 
 export class ListPage extends SalesPortalPage {
@@ -67,7 +67,7 @@ export class ListPage extends SalesPortalPage {
     const { search, quickFilters } = chipFilters;
     const filteredAndSearchedData: Record<string, string>[] = [];
 
-    await forEach(tableData, async (entity) => {
+    await asyncForEach(tableData, async (entity) => {
       const isQuickFilter: boolean | undefined = quickFilters?.some((qf) =>
         Object.values(entity).at(-1) === qf);
       const isSearchFilter = Object.values(entity).some((val) =>
@@ -107,6 +107,7 @@ export class ListPage extends SalesPortalPage {
   async clickOnSearchButton(page: string) {
     await this.clickOn(this['Search button'](page));
   }
+  // TODO could be refactored
 
   async parseTable(pageName: string) {
     const entities: object[] = [];
@@ -143,7 +144,7 @@ export class ListPage extends SalesPortalPage {
     };
 
     if (chips.length) {
-      await forEach(chips, async (chip) => {
+      await asyncForEach(chips, async (chip) => {
         const filter = await chip.getAttribute(`data-chip-${pageName}`);
 
         if (filter === 'search') {

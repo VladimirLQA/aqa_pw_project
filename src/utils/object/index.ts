@@ -17,9 +17,7 @@ export const hideValueInObject = (obj: object, keyToFind: string) =>
   updateValueInObject(obj, keyToFind, hideSecretData);
 
 export const getRandomObjectValue =
-  <T>(
-    object: T, random = Math.random,
-  ) => {
+  <T>(object: T, random = Math.random) => {
     const values = Object.values(object as object);
     const randomIdx = Math.floor(random() * values.length);
     return values[randomIdx];
