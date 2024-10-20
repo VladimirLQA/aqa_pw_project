@@ -12,8 +12,8 @@ export const manufacturerNames = ['Apple', 'Samsung', 'Google', 'Microsoft',
   'Sony', 'Xiaomi', 'Amazon', 'Tesla'] as const;
 
 export const MANUFACTURERS = {
-  APPLE: 'APPLE',
-  SAMSUNG: 'SAMSUNG',
+  APPLE: 'Apple',
+  SAMSUNG: 'Samsung',
   GOOGLE: 'Google',
   MICROSOFT: 'Microsoft',
   SONY: 'Sony',

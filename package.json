@@ -7,7 +7,7 @@
     "build": "rimraf dist && npx tsc",
     "test:ui": "cross-env TESTS=UI npx playwright test",
     "test:api": "cross-env TESTS=API HEADLESS=true npx playwright test",
-    "test:single": "cross-env TESTS=SINGLE HEADLESS=false npx playwright test",
+    "test:single": "cross-env TESTS=SINGLE HEADLESS=true npx playwright test",
     "report:pw-open": "npx playwright show-report",
     "report:create": "allure generate src/report/allure-results -o src/report/allure-report --clean",
     "report:open": "npm run report:create && allure open src/report/allure-report",
@@ -31,6 +31,7 @@
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-playwright": "^1.6.2",
+    "nock": "^13.5.5",
     "prettier": "^3.3.3",
     "typescript": "^5.4.3",
     "typescript-eslint": "^8.0.1"
