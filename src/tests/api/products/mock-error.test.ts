@@ -9,6 +9,8 @@ import { IProductFromResponse } from '../../../types/products/product.types';
 import { validateResponseWithSchema } from '../../../utils/validations/apiValidation';
 import { apiConfig } from '../../../api/config/apiConfig';
 
+import { server } from '../../../mocks/node';
+
 const mergeTest = mergeTests(mocks, services);
 
 mergeTest.describe('[API]. [Products][MOCKS]', () => {
@@ -23,21 +25,23 @@ mergeTest.describe('[API]. [Products][MOCKS]', () => {
   });
 
   mergeTest('Create smoke product', async ({ ProductsClient, mock }) => {
+    server.listen();
     const productData = generateNewProduct();
     // TODO refactor
-    const url = apiConfig.endpoints.Products;
-    mock.modifyResponse({
-      url,
-      method: 'POST',
-      body: { test: 'hello' },
-      statusCode: HTTP_STATUS_CODES.ALREADY_EXISTS,
-    });
+    // const url = apiConfig.endpoints.Products;
+    // mock.modifyResponse({
+    //   url,
+    //   method: 'POST',
+    //   body: { test: 'hello' },
+    //   statusCode: HTTP_STATUS_CODES.ALREADY_EXISTS,
+    // });
 
     const productResponse = await ProductsClient.create(
       { data: productData, token },
     );
+
     console.log('productResponse', productResponse);
-    createdProducts.push(productResponse.data.Product);
+    // createdProducts.push(productResponse.data.Product);
 
     // validateResponseWithSchema({
     //   response: productResponse,

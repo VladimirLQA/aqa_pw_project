@@ -40,7 +40,7 @@ class ProductsClient {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Products,
       options: {
-        method: 'post',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${params.token}` },
         data: params.data,
       },
