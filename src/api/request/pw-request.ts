@@ -8,7 +8,6 @@ class RequestApiClient extends BaseApiClient {
     const resp = await apiContext.fetch(
       this.options!.url, this.options!.options,
     );
-    apiContext.dispose();
     return resp;
   }
 
@@ -20,7 +19,7 @@ class RequestApiClient extends BaseApiClient {
 
   protected async transformResponse() {
     const transformedResponse = {
-      data: this.options!.options.method === 'delete' ? null : await this.response.json(),
+      data: this.options!.options.method === 'DELETE' ? null : await this.response.json(),
       status: this.response.status(),
       headers: this.response.headers(),
     };

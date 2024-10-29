@@ -10,7 +10,7 @@ export type IRequestOptions<Data = object> = {
   requestType: 'json' | 'formData';
 };
 
-type Method = 'post' | 'get' | 'put' | 'patch' | 'delete';
+export type Method = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
 
 export interface IResponse<T = any> {
   data: T;

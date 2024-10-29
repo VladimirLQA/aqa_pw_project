@@ -51,7 +51,7 @@ export abstract class BaseApiClient {
       if (this.response.status >= 500) {
         throw new Error(`Failed to send request. Reason:\n ${(error as Error).message}`);
       }
-      this.transformResponse();
+      await this.transformResponse();
     } finally {
       this.secureCheck();
       await this.logRequest();

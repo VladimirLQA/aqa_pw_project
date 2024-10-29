@@ -13,6 +13,9 @@ export class UIMock extends PageHolder {
     const { url, body, statusCode } = opt;
 
     await this.page.route(url, async (route, request) => {
+      // if (request.method() === 'POST') {
+      //   // logic
+      // }
       await route.fulfill({
         json: body,
         status: statusCode,
