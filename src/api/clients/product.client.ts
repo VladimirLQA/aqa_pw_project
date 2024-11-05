@@ -5,17 +5,19 @@ import {
 import { apiConfig } from 'api/config/apiConfig';
 import apiClient from 'api/request/request-index';
 import { logStep } from 'utils/reporter/decorators/logStep';
+import { UsersStorage } from '../../utils/storages';
+import signInService from '../services/signIn.service';
 
 class ProductsClient {
-  constructor(private client = apiClient) { }
+  constructor(private client = apiClient, private userStorage = UsersStorage) { }
 
   @logStep('Get product via API')
   async getById(params: RequestParams<Id>) {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints['Product By Id'](params.data._id),
       options: {
-        method: 'get',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${params.token}` },
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
       },
       requestType: 'json',
     };
@@ -27,8 +29,8 @@ class ProductsClient {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Products,
       options: {
-        method: 'get',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${params.token}` },
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
       },
       requestType: 'json',
     };
@@ -41,7 +43,7 @@ class ProductsClient {
       url: apiConfig.baseURL + apiConfig.endpoints.Products,
       options: {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${params.token}` },
+        headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
         data: params.data,
       },
       requestType: 'json',
@@ -54,8 +56,8 @@ class ProductsClient {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Products,
       options: {
-        method: 'put',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${params.token}` },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
         data: params.data,
       },
       requestType: 'json',
@@ -68,8 +70,8 @@ class ProductsClient {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints['Product By Id'](params.data._id),
       options: {
-        method: 'delete',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${params.token}` },
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
         data: params.data,
       },
       requestType: 'json',

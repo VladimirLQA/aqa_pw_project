@@ -86,3 +86,5 @@ export const sortById = <T extends { _id: string }>(array: T[]) =>
     if (a._id.toLowerCase() < b._id.toLowerCase()) return 1;
     return 0;
   });
+
+export const convertToBearer = (str: string) => `Bearer ${str}`;
