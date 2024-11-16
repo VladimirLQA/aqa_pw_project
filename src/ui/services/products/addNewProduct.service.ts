@@ -31,8 +31,8 @@ export class AddNewProductService extends SalesPortalService {
     const url = apiConfig.baseURL + apiConfig.endpoints.Products;
     const response = await this.salesPortalPage
       .interceptResponse<IProductResponse>(
-      url, this.clickOnSaveNewProductButton.bind(this),
-    );
+        url, this.clickOnSaveNewProductButton.bind(this),
+      );
     validateResponse({
       response,
       status: HTTP_STATUS_CODES.CREATED,
