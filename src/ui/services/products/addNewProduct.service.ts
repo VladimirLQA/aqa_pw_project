@@ -34,10 +34,8 @@ export class AddNewProductService extends SalesPortalService {
         url, this.clickOnSaveNewProductButton.bind(this),
       );
     validateResponse({
-      response,
-      status: HTTP_STATUS_CODES.CREATED,
-      IsSuccess: true,
-      ErrorMessage: null,
+      response, status: HTTP_STATUS_CODES.CREATED,
+      IsSuccess: true, ErrorMessage: null
     });
     return response;
   }

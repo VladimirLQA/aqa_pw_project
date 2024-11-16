@@ -29,7 +29,7 @@ export default [
       '@stylistic/js/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
       '@stylistic/js/no-trailing-spaces': 'error',
       '@stylistic/js/object-curly-newline': ['error', { multiline: true }],
-      '@stylistic/js/object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
+      '@stylistic/js/object-curly-spacing': ['error', 'always', { objectsInObjects: true }],
       '@stylistic/js/rest-spread-spacing': ['error', 'never'],
       '@stylistic/js/semi-style': ['error', 'last'],
       '@stylistic/js/semi-spacing': ['error', { before: false, after: true }],
