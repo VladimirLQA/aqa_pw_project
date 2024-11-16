@@ -12,8 +12,6 @@ interface PageFactoryFixture {
   productListService: ProductsListService;
   homeService: HomeService;
   signInService: SignInService;
-  // assert: ;
-
 }
 
 export const baseFixture = base.extend<PageFactoryFixture>({

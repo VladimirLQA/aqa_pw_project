@@ -4,7 +4,7 @@ import { logStep } from '../../utils/reporter/decorators/logStep';
 import { UsersStorage } from '../../utils/storages';
 
 class SignInApiService {
-  constructor(private client = clients.signIn, private userStorage = UsersStorage) {}
+  constructor(private client = clients?.signIn, private userStorage = UsersStorage) {}
 
   @logStep('Sign in as Admin via API')
   async signInAsAdminApi() {

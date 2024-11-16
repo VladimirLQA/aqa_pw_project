@@ -224,17 +224,16 @@ export abstract class BasePage extends PageHolder {
     url: string,
     triggerAction?: () => Promise<void>,
   ): Promise<IResponse<T>> {
+    const responsePromise = this.waitForResponse(url);
+
     if (triggerAction) {
-      const [response] =
-        await Promise.all([this.waitForResponse(url), triggerAction()]);
-      return {
-        data: (await response.json()) as T,
-        status: response.status(),
-        headers: response.headers(),
-      };
+      await triggerAction();
     }
-    const response = await this.waitForResponse(url);
-    return response.json();
+
+    const response = await responsePromise;
+    const data = (await response.json()) as T;
+
+    return { data, status: response.status(), headers: response.headers() };
   }
 
   // async checkNotificationWithText(text: string) {

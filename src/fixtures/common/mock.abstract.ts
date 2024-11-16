@@ -10,7 +10,7 @@ const nock = require('nock');
 export interface MockOptions<T = any> {
   url: string;
   baseURL: string;
-  method?: Method;
+  method: Method;
   body: T;
   statusCode: typeof HTTP_STATUS_CODES[keyof typeof HTTP_STATUS_CODES];
   headers?: Record<string, any>;

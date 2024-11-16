@@ -32,8 +32,8 @@ export class LoggedInUsers {
 
   getToken(username?: string) {
     return username
-      ? this.findUserByUsername(username)?.token
-      : this.users[this.users.length - 1]?.token;
+      ? this.findUserByUsername(username).token
+      : this.users[this.users.length - 1].token;
   }
 
   removeToken(username?: string) {

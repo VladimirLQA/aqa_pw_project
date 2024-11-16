@@ -7,7 +7,7 @@ export class HomePage extends SalesPortalPage {
 
   readonly 'Customers view details button' = this.findElement('button#customers-from-home');
 
-  readonly uniqueElement: string = 'div#myCarousel';
+  readonly uniqueElement: string = '.page-header h1';
 
   readonly 'Sidebar button by name' =
     (name: 'Products' | 'Customers' | 'Orders' | 'Home') =>

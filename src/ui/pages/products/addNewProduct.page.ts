@@ -34,22 +34,4 @@ export class AddNewProductPage extends SalesPortalPage {
   async clickOnSaveNewProductButton() {
     await this.clickOn(this['Save New Product button']);
   }
-
-  @logStep('Create New Product')
-  async createProduct(product: IProduct) {
-    await this.fillProductInputs(product);
-    const response = await this.interceptCreateProductResponse();
-    await this.waitForSpinnerToHide();
-    // await this.verifyAndCloseNotification(NOTIFICATION_MESSAGES.PRODUCT_CREATED);
-    ProductsStorage.addEntity(response.data.Product);
-  }
-
-  private async interceptCreateProductResponse() {
-    const url = apiConfig.baseURL + apiConfig.endpoints.Products;
-    const response = await this.interceptResponse<IProductResponse>(
-      url, this.clickOnSaveNewProductButton.bind(this),
-    );
-    validateResponse(response, HTTP_STATUS_CODES.CREATED, true, null);
-    return response;
-  }
 }
