@@ -9,6 +9,15 @@ export default [
       semi: 'error',
       quotes: ['error', 'single'],
       'no-this-before-super': 'error',
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+        },
+      ],
+      // '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
+      '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
     },
   },
   pluginJs.configs.recommended,
