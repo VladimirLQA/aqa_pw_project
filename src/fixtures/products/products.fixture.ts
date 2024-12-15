@@ -3,6 +3,7 @@ import { generateNewProduct } from 'data/products/productGeneration';
 import { expect, test as base } from 'fixtures/common/services.fixture';
 import { Users } from 'utils/storages';
 import { HTTP_STATUS_CODES } from 'data/http/statusCodes';
+import { }
 
 interface ProductFixture {
   createProductViaApi: (product?: IProduct, token?: string) => Promise<IProductFromResponse>;

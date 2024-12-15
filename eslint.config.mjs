@@ -18,8 +18,6 @@ export default [
         'error',
         {
           enforce: [
-            { blankLine: 'always', prev: '*', next: 'field' },
-            { blankLine: 'always', prev: 'field', next: '*' },
             { blankLine: 'always', prev: 'method', next: 'method' },
           ],
         },
@@ -59,6 +57,8 @@ export default [
         { allowTemplateLiterals: true, avoidEscape: true },
       ],
       'no-this-before-super': 'error',
+      '@typescript-eslint/no-unused-expressions': 0,
+      '@typescript-eslint/no-unsafe-function-type': 'off',
       // '@typescript-eslint/no-unused-expressions': [
       //   'error',
       //   {

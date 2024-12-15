@@ -18,9 +18,8 @@ mergeTest.describe('[API]. [Products][MOCKS]', () => {
   let token: string = '';
 
   mergeTest.beforeAll(async ({ SignInClient }) => {
-    const signInResponse = await SignInClient.login({
-      data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD },
-    });
+    const signInResponse =
+      await SignInClient.login({ data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD }, });
     token = signInResponse.data.token;
   });
 

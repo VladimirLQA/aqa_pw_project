@@ -39,9 +39,7 @@ export class SignInService extends SalesPortalService {
   private async clickSignInAndGetTokenFromResponse() {
     const url = `${apiConfig.baseURL}/${apiConfig.endpoints.Login}`;
     const response = await this.salesPortalPage
-      .interceptResponse<ILoginResponse>(
-      url, this.clickSignInButton.bind(this),
-    );
+      .interceptResponse<ILoginResponse>(url, this.clickSignInButton.bind(this));
     return response.data.token;
   }
 

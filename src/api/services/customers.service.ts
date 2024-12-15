@@ -16,7 +16,7 @@ export class CustomersApiService {
 
     for (let i = 1; i <= amount; i++) {
       const cutomerToCreate = generateNewCustomer();
-      const createdCustomer = await this.client.create(cutomerToCreate, token);
+      const createdCustomer = await this.client.create({ data: cutomerToCreate, token });
 
       expect(createdCustomer.status).toBe(HTTP_STATUS_CODES.CREATED);
       CustomersStorage.addEntity(createdCustomer.data.Customer);
@@ -28,7 +28,7 @@ export class CustomersApiService {
     const token = await signInApiService.signInAsAdminApi();
 
     for (const customer of CustomersStorage.getAllEntities()) {
-      const response = await this.client.delete(customer._id, token);
+      const response = await this.client.delete({ data: { _id: customer._id }, token });
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     }
   }
@@ -36,16 +36,15 @@ export class CustomersApiService {
   @logStep('Create {amount} customers')
   async deleteCreatedCustomer(email: string) {
     const token = await signInApiService.signInAsAdminApi();
-
-    const customers = await this.client.getAll(token);
-    const customerToDelete =
-      customers.data.Customers.find((c: ICustomerFromResponse) =>
-        c.email === email);
+    const customers = await this.client.getAll({ token });
+    const customerToDelete = customers.data.Customers.find((c: ICustomerFromResponse) => c.email === email);
     if (customerToDelete) {
-      const response = await this.client.delete(customerToDelete._id, token);
+      const response = await this.client.delete({ data: { _id: customerToDelete._id }, token });
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     } else {
       throw new Error(`Customer with email: '${email}' was not found`);
     }
   }
 }
+
+export default new CustomersApiService();

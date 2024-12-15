@@ -1,58 +1,41 @@
 import { SalesPortalPage } from './salesPortal.page';
-import { clients } from '../../api/clients';
-import { UsersStorage } from '../../utils/storages';
+import { clients, DataClients } from '../../api/clients';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
 import { asyncForEach } from '../../utils/array/forEach';
 import { asyncMap } from '../../utils/array/map';
+import signInService from '../../api/services/signIn.service';
 
 export class ListPage extends SalesPortalPage {
-  protected readonly 'Table row selector' = (entityName: string) =>
-    this.findElement(`//tr[./td[text()="${entityName}"]]`);
-
+  protected readonly 'Table row selector' = (entityName: string) => this.findElement(`//tr[./td[text()="${entityName}"]]`);
   protected readonly 'Actions by entity name selector' = (entityName: string) =>
     `${this['Table row selector'](entityName)}/td[5]`;
 
   readonly 'Details button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}
-      /button[@title="Details"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Details"]`);
 
   readonly 'Edit button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}
-      /button[@title="Edit"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Edit"]`);
 
   readonly 'Delete button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}
-      /button[@title="Delete"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Delete"]`);
 
-  readonly 'Table columns names row' =
-    (pageName: string) => this.findElement(`#table-${pageName} thead th`);
-
+  readonly 'Table columns names row' = (pageName: string) => this.findElement(`#table-${pageName} thead th`);
   readonly "Table row values without 'style' attr" = (pageName: string) =>
-    this.findElement(`//table[@id='table-${pageName}']
-        //tbody//tr[not(@style)]`);
+    this.findElement(`//table[@id='table-${pageName}']//tbody//tr[not(@style)]`);
 
   readonly 'Chip buttons' = this.findElement('#chip-buttons .chip');
-
   readonly 'Filter button' = this.findElement('#filter');
-
-  readonly 'Filter checkbox' = (filterName: string) =>
-    `//input[@id="${filterName}-filter"]`;
-
+  readonly 'Filter checkbox' = (filterName: string) => `//input[@id="${filterName}-filter"]`;
   readonly 'Apply button' = this.findElement('#apply-filters');
-
-  readonly 'Search button' = (pageName: string) =>
-    this.findElement(`#search-${pageName}`);
-
+  readonly 'Clear filters button' = this.findElement('#clear-filters');
+  readonly 'Search button' = (pageName: string) => this.findElement(`#search-${pageName}`);
   readonly 'Search input field' = this.findElement('input[type=search]');
 
-  async getApiMappedData(
-    pageName: keyof typeof clients,
-  ) {
-    const data = (await clients[pageName]
-      // @ts-ignore
-      .getAll({ token: UsersStorage.getToken() }))
+  async getApiMappedData(pageName: keyof DataClients) {
+    // @ts-expect-error A TS error is expected due to received 'union type'
+    const data = (await clients[pageName].getAll({ token: signInService.getToken() }))
       .data[capitalize(pageName) as TListPageNames];
 
     return asyncMap(data, (entity: { [key: string]: any }) => {
@@ -62,16 +45,14 @@ export class ListPage extends SalesPortalPage {
   }
 
   async getTableDataAfterFilterAndSearch(
-    tableData: Record<string, string>[], chipFilters: IChipsFilterOptions,
+    tableData: Record<string, string>[], chipFilters: IChipsFilterOptions
   ) {
     const { search, quickFilters } = chipFilters;
     const filteredAndSearchedData: Record<string, string>[] = [];
 
     await asyncForEach(tableData, async (entity) => {
-      const isQuickFilter: boolean | undefined = quickFilters?.some((qf) =>
-        Object.values(entity).at(-1) === qf);
-      const isSearchFilter = Object.values(entity).some((val) =>
-        val.toLowerCase().includes((search ?? '').toLowerCase()));
+      const isQuickFilter: boolean | undefined = quickFilters?.some((qf) => Object.values(entity).at(-1) === qf);
+      const isSearchFilter = Object.values(entity).some((val) => val.toLowerCase().includes((search ?? '').toLowerCase()));
 
       if (search && quickFilters?.length) {
         if (isQuickFilter && isSearchFilter) {
@@ -112,36 +93,30 @@ export class ListPage extends SalesPortalPage {
   async parseTable(pageName: string) {
     const entities: object[] = [];
     const columnNames: [...string[]] =
-      (await this['Table columns names row'](pageName)
-        .allInnerTexts()).reduce((names, name: string, i, arr) => {
-        if (i < arr.length - 2) {
-          // @ts-ignore
-          names.push(name);
-        }
-        return names;
-      }, []) as string[];
+      (await this['Table columns names row'](pageName).allInnerTexts())
+        .reduce((names, name: string, i, arr) => {
+          if (i < arr.length - 2) {
+            names.push(name);
+          }
+          return names;
+        }, [] as string[]);
 
-    (await (this["Table row values without 'style' attr"](pageName))
-      .allInnerTexts()).forEach((el) => {
+    (await (this["Table row values without 'style' attr"](pageName)).allInnerTexts()).forEach((el) => {
       const values: string[] = [];
       el.split('\t').forEach((v, i, array) => {
         if (i < array.length - 2) {
           values.push(v);
         }
       });
-      entities.push(Object.assign(
-        // @ts-ignore
-        ...columnNames.map((k, idx) => ({ [k]: values[idx] })),
-      ));
+      const mappedValues = columnNames.map((k, idx) => ({ [k]: values[idx] }));
+      entities.push(Object.assign({}, mappedValues));
     });
     return entities;
   }
 
   async getListOfChipButtons(pageName: string) {
     const chips = await this.findElementArray(this['Chip buttons']);
-    const chipsFilters: IChipsFilterOptions = {
-      quickFilters: [],
-    };
+    const chipsFilters: IChipsFilterOptions = { quickFilters: [] };
 
     if (chips.length) {
       await asyncForEach(chips, async (chip) => {

@@ -3,9 +3,7 @@ import { SalesPortalPage } from './salesPortal.page';
 
 export class SignInPage extends SalesPortalPage {
   readonly 'Email input' = this.findElement('#emailinput');
-
   readonly 'Password input' = this.findElement('#passwordinput');
-
   readonly 'Login button' = this.findElement('button.btn-primary');
 
   async fillCredentialFields(credentials: IUserCredentials) {

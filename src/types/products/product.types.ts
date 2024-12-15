@@ -8,8 +8,16 @@ export interface IProduct {
   manufacturer: TGetObjectValues<typeof MANUFACTURERS>;
 }
 
-export const manufacturerNames = ['Apple', 'Samsung', 'Google', 'Microsoft',
-  'Sony', 'Xiaomi', 'Amazon', 'Tesla'] as const;
+export const manufacturerNames = [
+  'Apple',
+  'Samsung',
+  'Google',
+  'Microsoft',
+  'Sony',
+  'Xiaomi',
+  'Amazon',
+  'Tesla',
+] as const;
 
 export const MANUFACTURERS = {
   APPLE: 'Apple',
@@ -20,17 +28,13 @@ export const MANUFACTURERS = {
   XIAOMI: 'Xiaomi',
   AMAZON: 'Amazon',
   TESLA: 'Tesla',
-};
+} as const;
 
 export interface IProductFromResponse extends IProduct {
   _id: string;
   createdOn: string;
 }
 
-export interface IProductResponse {
-  Product: IProductFromResponse;
-}
+export interface IProductResponse { Product: IProductFromResponse }
 
-export interface IProductsResponse {
-  Products: IProductFromResponse[];
-}
+export interface IProductsResponse { Products: IProductFromResponse[] }

@@ -4,14 +4,18 @@ import { TIMEOUT_10_SEC } from './timeouts';
 import { isLocator } from './typeGuards/selector';
 
 export const delay = async (timeout: number) =>
-  new Promise((resolve) => { setTimeout(resolve, timeout); });
+  new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
 
-export const waitUntil = async (condition: () => Promise<boolean>,
-  options?: IWaitUntilOptions) => {
+export const waitUntil = async (
+  condition: () => Promise<boolean>,
+  options?: IWaitUntilOptions,
+) => {
   const interval = options?.interval ?? 500;
   const timeout = options?.timeout || TIMEOUT_10_SEC;
-  const timeoutMessage = options?.timeoutMsg
-    || 'Condition not met within the specified timeout.';
+  const timeoutMessage =
+    options?.timeoutMsg || 'Condition not met within the specified timeout.';
   let elapsedTime = 0;
 
   while (elapsedTime < timeout) {
@@ -32,11 +36,16 @@ export const capitalize = (word: string) =>
 const pickFunc = <T extends {}, K extends keyof T>(
   obj: T,
   predicate: (k: string) => boolean,
-): Pick<T, K> => Object.keys(obj)
-    .filter(predicate)
-    .reduce((filteredObj: Pick<T, K>, key) => (
-      { ...filteredObj, [key]: obj[key as keyof T] }
-    ), {} as Pick<T, K>);
+): Pick<T, K> =>
+    Object.keys(obj)
+      .filter(predicate)
+      .reduce(
+        (filteredObj: Pick<T, K>, key) => ({
+          ...filteredObj,
+          [key]: obj[key as keyof T],
+        }),
+      {} as Pick<T, K>,
+      );
 /**
  * Creates an object composed of the picked `object` properties.
  *
@@ -50,10 +59,13 @@ const pickFunc = <T extends {}, K extends keyof T>(
  * pick(object, ['a', 'c']);
  * // => { 'a': 1, 'c': 3 }
  */
-export const pick = <T extends {}, K extends keyof T>
-  (object: T, keys: K[] | K): Pick<T, K> =>
-    pickFunc(object, (k) => (Array.isArray(keys)
-      ? keys : [keys]).includes(k as K));
+export const pick = <T extends {}, K extends keyof T>(
+  object: T,
+  keys: K[] | K,
+): Pick<T, K> =>
+    pickFunc(object, (k) =>
+      (Array.isArray(keys) ? keys : [keys]).includes(k as K),
+    );
 /**
  * The opposite of `pick`; this method creates an object composed of the
  * own and inherited enumerable properties of `object` that are not omitted.
@@ -68,10 +80,8 @@ export const pick = <T extends {}, K extends keyof T>
  * omit(object, ['a', 'c']);
  * // => { 'b': '2' }
  */
-export const omit = <T extends {}, K extends keyof T>
-  (object: T, keys: K[]): Pick<T, K> =>
-    pickFunc(object, (k) => !(Array.isArray(keys)
-      ? keys : [keys]).includes(k as K));
+export const omit = <T extends {}, K extends keyof T>(object: T, keys: K[]): Pick<T, K> =>
+  pickFunc(object, (k) => !(Array.isArray(keys) ? keys : [keys]).includes(k as K));
 
 export const getElementSelector = (item: Locator | string) => {
   if (isLocator(item)) {
