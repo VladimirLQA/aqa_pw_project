@@ -12,9 +12,7 @@ export const keysForMapping: { [key: string]: string } = {
   notes: 'Notes',
 };
 
-export const componentKeys: { [key: string]: string[] } = {
-  products: ['name', 'price', 'manufacturer'],
-};
+export const componentKeys: { [key: string]: string[] } = { products: ['name', 'price', 'manufacturer'], };
 
 export const keyMapper = <T extends { [key: string]: any }>(
   data: T,

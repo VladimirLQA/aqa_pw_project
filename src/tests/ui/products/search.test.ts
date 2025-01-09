@@ -1,6 +1,4 @@
-import {
-  createAndVerifyProductsTableData as test,
-} from '../../../fixtures/common/pageFactory.fixture';
+import { createAndVerifyProductsTableData as test, } from '../../../fixtures/common/pageFactory.fixture';
 
 test.describe('test', () => {
   test('[Products]. [Should verify table data after search with filters]', async (
