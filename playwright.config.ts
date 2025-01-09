@@ -50,9 +50,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     // baseURL: process.env.TESTS === "UI" ? URL : apiConfig.baseURL,
     baseURL: URL,
-    launchOptions: {
-      args: ['--start-maximized'],
-    },
+    launchOptions: { args: ['--start-maximized'] },
   },
 
   /* Configure projects for major browsers */

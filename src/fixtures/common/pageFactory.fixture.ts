@@ -35,30 +35,29 @@ export const loggedAsAdmin = baseFixture.extend({
   },
 });
 
-export const createAndVerifyProductsTableData = loggedAsAdmin.extend<{
-  createdProducts: IProductFromResponse[],
-}>({
-  createdProducts: async ({}, use) => {
-    const createdProducts: IProductFromResponse[] = [];
+export const createAndVerifyProductsTableData =
+  loggedAsAdmin.extend<{createdProducts: IProductFromResponse[],}>({
+    createdProducts: async ({}, use) => {
+      const createdProducts: IProductFromResponse[] = [];
 
-    const signInResponse = await clients.signIn.login({
-      data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD },
-    });
-    const { token } = signInResponse.data;
-    for (let i = 1; i <= 5; i++) {
-      const data = generateNewProduct();
-      const response = await clients.products.create(
-        { data, token },
-      );
-      expect(response.status).toBe(HTTP_STATUS_CODES.CREATED);
-      createdProducts.push(response.data.Product);
-    }
-    await use(createdProducts);
+      const signInResponse = await clients.signIn.login({
+        data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD },
+      });
+      const { token } = signInResponse.data;
+      for (let i = 1; i <= 5; i++) {
+        const data = generateNewProduct();
+        const response = await clients.products.create(
+          { data, token },
+        );
+        expect(response.status).toBe(HTTP_STATUS_CODES.CREATED);
+        createdProducts.push(response.data.Product);
+      }
+      await use(createdProducts);
 
-    for (const p of createdProducts) {
-      await clients.products.delete(
-        { token, data: { _id: p._id } },
-      );
-    }
-  },
-});
+      for (const p of createdProducts) {
+        await clients.products.delete(
+          { token, data: { _id: p._id } },
+        );
+      }
+    },
+  });
