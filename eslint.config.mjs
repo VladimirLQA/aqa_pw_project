@@ -16,19 +16,12 @@ export default [
       ],
       '@stylistic/js/lines-between-class-members': [
         'error',
-        {
-          enforce: [
-            { blankLine: 'always', prev: '*', next: 'field' },
-            { blankLine: 'always', prev: 'field', next: '*' },
-            { blankLine: 'always', prev: 'method', next: 'method' },
-          ],
-        },
+        { enforce: [{ blankLine: 'always', prev: 'method', next: 'method' }] },
       ],
       '@stylistic/js/multiline-ternary': ['error', 'always-multiline'],
       '@stylistic/js/newline-per-chained-call': ['error', { ignoreChainWithDepth: 2 }],
       '@stylistic/js/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
       '@stylistic/js/no-trailing-spaces': 'error',
-      '@stylistic/js/object-curly-newline': ['error', { multiline: true }],
       '@stylistic/js/object-curly-spacing': ['error', 'always', { objectsInObjects: true }],
       '@stylistic/js/rest-spread-spacing': ['error', 'never'],
       '@stylistic/js/semi-style': ['error', 'last'],
@@ -59,13 +52,13 @@ export default [
         { allowTemplateLiterals: true, avoidEscape: true },
       ],
       'no-this-before-super': 'error',
-      // '@typescript-eslint/no-unused-expressions': [
-      //   'error',
-      //   {
-      //     allowShortCircuit: true,
-      //     allowTernary: true,
-      //   },
-      // ],
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+        },
+      ],
       // // '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
       // '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
     },
