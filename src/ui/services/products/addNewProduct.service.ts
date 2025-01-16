@@ -10,14 +10,13 @@ import { validateResponse } from '../../../utils/validations/apiValidation';
 
 export class AddNewProductService extends SalesPortalService {
   private productsPage = new ProductsListPage(this.page);
-
   private addNewProductPage = new AddNewProductPage(this.page);
 
   @logStep('Create New Product')
   async createProduct(product: IProduct) {
     await this.addNewProductPage.fillProductInputs(product);
     const response = await this.interceptCreateProductResponse();
-    await this.salesPortalPage.waitForSpinnerToHide();
+    await this.basePage.waitForSpinnersToBeHidden();
     await this.productsPage.waitForOpened();
     ProductsStorage.addEntity(response.data.Product);
   }
@@ -29,7 +28,7 @@ export class AddNewProductService extends SalesPortalService {
 
   private async interceptCreateProductResponse() {
     const url = apiConfig.baseURL + apiConfig.endpoints.Products;
-    const response = await this.salesPortalPage
+    const response = await this.basePage
       .interceptResponse<IProductResponse>(
         url, this.clickOnSaveNewProductButton.bind(this),
       );
