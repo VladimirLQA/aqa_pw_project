@@ -1,21 +1,9 @@
 import { IProduct } from 'types/products/product.types';
-import { SalesPortalPage } from 'ui/pages/salesPortal.page';
+import { AddEditProductPage } from './addEditProduct.page';
 
-export class AddNewProductPage extends SalesPortalPage {
+export class AddNewProductPage extends AddEditProductPage {
   readonly uniqueElement = '//h2[.="Add New Product "]';
-
-  readonly 'Name input' = this.findElement('#inputName');
-
-  readonly 'Manufacturer dropdown' = this.findElement('#inputManufacturer');
-
-  readonly 'Price input' = this.findElement('#inputPrice');
-
-  readonly 'Amount input' = this.findElement('#inputAmount');
-
-  readonly 'Notes input' = this.findElement('#textareaNotes');
-
-  readonly 'Save New Product button' = this.findElement('#save-new-product');
-
+  readonly 'Save Product button' = this.findElement('#save-new-product');
   readonly 'Page body' = this.findElement('//div[@id="root"]/div');
 
   async fillProductInputs(product: IProduct) {
@@ -23,10 +11,10 @@ export class AddNewProductPage extends SalesPortalPage {
     product.manufacturer && await this.selectDropdownValue(this['Manufacturer dropdown'], product.manufacturer);
     product.price && await this.fillValue(this['Price input'], `${product.price}`);
     product.amount && await this.fillValue(this['Amount input'], `${product.amount}`);
-    product.notes && await this.fillValue(this['Notes input'], product.notes);
+    product.notes && await this.fillValue(this['Notes textarea'], product.notes);
   }
 
   async clickOnSaveNewProductButton() {
-    await this.clickOn(this['Save New Product button']);
+    await this.clickOn(this['Save Product button']);
   }
 }

@@ -1,5 +1,5 @@
 import { Locator } from '@playwright/test';
-import { ElementState, ResizeCoordinates } from 'types/core/actions.types';
+import { ElementState, IWaitUntilOptions, ResizeCoordinates } from 'types/core/actions.types';
 import { TIMEOUT_5_SEC, TIMEOUT_10_SEC } from 'utils/timeouts';
 import { isLocator } from 'utils/typeGuards/selector';
 import { IResponse } from 'types/api/apiClient.types';
@@ -22,7 +22,7 @@ export interface IOptionsWithState extends IOptions {
   state?: ElementState;
 }
 
-export abstract class BasePage extends PageHolder {
+export abstract class ActionsPage extends PageHolder {
   findElement(selectorOrElement: string | Locator) {
     return isLocator(selectorOrElement)
       ? selectorOrElement
@@ -48,20 +48,14 @@ export abstract class BasePage extends PageHolder {
     return elements;
   }
 
-  async waitForElement(
-    selector: string | Locator,
-    options: IOptionsWithState = { timeout: TIMEOUT_10_SEC },
-  ) {
+  async waitForElement(selector: string | Locator, options: IOptionsWithState = { timeout: TIMEOUT_10_SEC } ) {
     const { state, timeout } = options;
-
     const element = this.findElement(selector);
     await element.waitFor({ state, timeout });
     return element;
   }
 
-  async waitForElementAndScroll(
-    selector: string | Locator, timeout = TIMEOUT_5_SEC,
-  ) {
+  async waitForElementAndScroll(selector: string | Locator, timeout = TIMEOUT_5_SEC) {
     const element = this.findElement(selector);
     await element.scrollIntoViewIfNeeded({ timeout });
     return element;
@@ -76,13 +70,13 @@ export abstract class BasePage extends PageHolder {
   @logStep('Fill value "{value}" into element with {selector}')
   async fillValue(
     selector: string | Locator,
-    text: string,
+    text: string | number,
     options: TSecretValue = { isSecret: false, timeout: TIMEOUT_5_SEC },
   ) {
     const { timeout } = options;
     const element = await this.waitForElementAndScroll(selector, timeout);
     if (element) {
-      await element.fill(text, { timeout });
+      await element.fill(String(text), { timeout });
     }
   }
 
@@ -297,5 +291,23 @@ export abstract class BasePage extends PageHolder {
 
   async deleteCookies(name: string) {
     await this.page.context().clearCookies({ name });
+  }
+
+  async waitUntil(condition: () => Promise<boolean>, options?: IWaitUntilOptions) {
+    const interval = options?.interval ?? 500;
+    const timeout = options?.timeout ?? 10000;
+    const timeoutMessage = options?.timeoutMsg || `Condition not met within the specified timeout.`;
+    let elapsedTime = 0;
+
+    while (elapsedTime < timeout) {
+      if (await condition()) {
+        return;
+      }
+
+      await this.page.waitForTimeout(interval);
+      elapsedTime += interval;
+    }
+
+    throw new Error(timeoutMessage);
   }
 }
