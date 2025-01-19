@@ -1,26 +1,9 @@
-import { IProduct, IProductResponse } from 'types/products/product.types';
-import { SalesPortalPage } from 'ui/pages/salesPortal.page';
-import { validateResponse } from 'utils/validations/apiValidation';
-import { HTTP_STATUS_CODES } from 'data/http/statusCodes';
-import { ProductsStorage } from 'utils/storages';
-import { logStep } from 'utils/reporter/decorators/logStep';
-import { apiConfig } from '../../../api/config/apiConfig';
+import { IProduct } from 'types/products/product.types';
+import { AddEditProductPage } from './addEditProduct.page';
 
-export class AddNewProductPage extends SalesPortalPage {
+export class AddNewProductPage extends AddEditProductPage {
   readonly uniqueElement = '//h2[.="Add New Product "]';
-
-  readonly 'Name input' = this.findElement('#inputName');
-
-  readonly 'Manufacturer dropdown' = this.findElement('#inputManufacturer');
-
-  readonly 'Price input' = this.findElement('#inputPrice');
-
-  readonly 'Amount input' = this.findElement('#inputAmount');
-
-  readonly 'Notes input' = this.findElement('#textareaNotes');
-
-  readonly 'Save New Product button' = this.findElement('#save-new-product');
-
+  readonly 'Save Product button' = this.findElement('#save-new-product');
   readonly 'Page body' = this.findElement('//div[@id="root"]/div');
 
   async fillProductInputs(product: IProduct) {
@@ -28,33 +11,10 @@ export class AddNewProductPage extends SalesPortalPage {
     product.manufacturer && await this.selectDropdownValue(this['Manufacturer dropdown'], product.manufacturer);
     product.price && await this.fillValue(this['Price input'], `${product.price}`);
     product.amount && await this.fillValue(this['Amount input'], `${product.amount}`);
-    product.notes && await this.fillValue(this['Notes input'], product.notes);
+    product.notes && await this.fillValue(this['Notes textarea'], product.notes);
   }
 
   async clickOnSaveNewProductButton() {
-    await this.clickOn(this['Save New Product button']);
-  }
-
-  @logStep('Create New Product')
-  async createProduct(product: IProduct) {
-    await this.fillProductInputs(product);
-    const response = await this.interceptCreateProductResponse();
-    await this.waitForSpinnerToHide();
-    // await this.verifyAndCloseNotification(NOTIFICATION_MESSAGES.PRODUCT_CREATED);
-    ProductsStorage.addEntity(response.data.Product);
-  }
-
-  private async interceptCreateProductResponse() {
-    const url = apiConfig.baseURL + apiConfig.endpoints.Products;
-    const response = await this.interceptResponse<IProductResponse>(
-      url, this.clickOnSaveNewProductButton.bind(this),
-    );
-    validateResponse({
-      response,
-      status: HTTP_STATUS_CODES.CREATED,
-      IsSuccess: true,
-      ErrorMessage: null,
-    });
-    return response;
+    await this.clickOn(this['Save Product button']);
   }
 }

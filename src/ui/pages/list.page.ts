@@ -1,4 +1,4 @@
-import { SalesPortalPage } from './salesPortal.page';
+import { UniqueElement } from './salesPortal.page';
 import { clients } from '../../api/clients';
 import { UsersStorage } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
@@ -7,49 +7,35 @@ import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
 import { asyncForEach } from '../../utils/array/forEach';
 import { asyncMap } from '../../utils/array/map';
 
-export class ListPage extends SalesPortalPage {
-  protected readonly 'Table row selector' = (entityName: string) =>
+export abstract class ListPage extends UniqueElement {
+  readonly 'Table row selector' = (entityName: string) =>
     this.findElement(`//tr[./td[text()="${entityName}"]]`);
 
-  protected readonly 'Actions by entity name selector' = (entityName: string) =>
+  readonly 'Actions by entity name selector' = (entityName: string) =>
     `${this['Table row selector'](entityName)}/td[5]`;
 
   readonly 'Details button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}
-      /button[@title="Details"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Details"]`);
 
   readonly 'Edit button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}
-      /button[@title="Edit"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Edit"]`);
 
   readonly 'Delete button by entity name' = (entityName: string) =>
-    this.findElement(`${this['Actions by entity name selector'](entityName)}
-      /button[@title="Delete"]`);
+    this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Delete"]`);
 
-  readonly 'Table columns names row' =
-    (pageName: string) => this.findElement(`#table-${pageName} thead th`);
+  readonly 'Table columns names row' = (pageName: string) => this.findElement(`#table-${pageName} thead th`);
 
   readonly "Table row values without 'style' attr" = (pageName: string) =>
-    this.findElement(`//table[@id='table-${pageName}']
-        //tbody//tr[not(@style)]`);
+    this.findElement(`//table[@id='table-${pageName}']//tbody//tr[not(@style)]`);
 
   readonly 'Chip buttons' = this.findElement('#chip-buttons .chip');
-
   readonly 'Filter button' = this.findElement('#filter');
-
-  readonly 'Filter checkbox' = (filterName: string) =>
-    `//input[@id="${filterName}-filter"]`;
-
+  readonly 'Filter checkbox' = (filterName: string) => `//input[@id="${filterName}-filter"]`;
   readonly 'Apply button' = this.findElement('#apply-filters');
-
-  readonly 'Search button' = (pageName: string) =>
-    this.findElement(`#search-${pageName}`);
-
+  readonly 'Search button' = (pageName: string) => this.findElement(`#search-${pageName}`);
   readonly 'Search input field' = this.findElement('input[type=search]');
 
-  async getApiMappedData(
-    pageName: keyof typeof clients,
-  ) {
+  async getApiMappedData(pageName: keyof typeof clients) {
     const data = (await clients[pageName]
       // @ts-ignore
       .getAll({ token: UsersStorage.getToken() }))
@@ -61,9 +47,7 @@ export class ListPage extends SalesPortalPage {
     });
   }
 
-  async getTableDataAfterFilterAndSearch(
-    tableData: Record<string, string>[], chipFilters: IChipsFilterOptions,
-  ) {
+  async getTableDataAfterFilterAndSearch(tableData: Record<string, string>[], chipFilters: IChipsFilterOptions) {
     const { search, quickFilters } = chipFilters;
     const filteredAndSearchedData: Record<string, string>[] = [];
 

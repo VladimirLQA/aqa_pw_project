@@ -1,4 +1,5 @@
 import { ILoginResponse } from 'types/user/user.types';
+import { convertToBearer } from '../utils';
 
 export interface ILoggedInUser {
   username: string;
@@ -7,7 +8,6 @@ export interface ILoggedInUser {
 
 export class LoggedInUsers {
   private users: ILoggedInUser[] = [];
-
   private static instance: LoggedInUsers;
 
   constructor() {
@@ -19,10 +19,8 @@ export class LoggedInUsers {
 
   setToken(loginResponse: ILoginResponse, username?: string) {
     username
-      ? (this.findUserByUsername(username).token =
-         this.createTokenFromResponse(loginResponse))
-      : (this.users[this.users.length - 1].token =
-        this.createTokenFromResponse(loginResponse));
+      ? (this.findUserByUsername(username).token = this.createTokenFromResponse(loginResponse))
+      : (this.users[this.users.length - 1].token = this.createTokenFromResponse(loginResponse));
   }
 
   setUser(username: string, loginResponse: ILoginResponse) {
@@ -43,8 +41,8 @@ export class LoggedInUsers {
       : (this.users[this.users.length - 1].token = '');
   }
 
-  createTokenFromResponse(loginResponse: ILoginResponse) {
-    return loginResponse.token;
+  createTokenFromResponse(loginResponse: ILoginResponse, type: 'Bearer' | 'ApiKey' = 'Bearer') {
+    return type === 'Bearer' ? `${convertToBearer(loginResponse.token)}` : `${type} ${loginResponse.token}`;
   }
 
   private findUserByUsername(username: string) {

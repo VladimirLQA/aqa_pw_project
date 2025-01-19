@@ -12,7 +12,7 @@ class SignInClient {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Login,
       options: {
-        method: 'post',
+        method: 'POST',
         headers: {},
         data: params.data,
       },

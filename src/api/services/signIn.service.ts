@@ -2,36 +2,32 @@ import { clients } from '../clients/index';
 import { ADMIN_USERNAME, ADMIN_PASSWORD } from '../../config/environment';
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import { UsersStorage } from '../../utils/storages';
-// TODO refactor with oop
-class SignInApiService {
-  private token: string | null = null;
 
-  constructor(private client = clients.signIn) {}
+class SignInApiService {
+  constructor(private client = clients?.signIn, private userStorage = UsersStorage) {}
 
   @logStep('Sign in as Admin via API')
   async signInAsAdminApi() {
     const resp = await this.client.login(
       { data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD } },
     );
-    UsersStorage.setUser(ADMIN_USERNAME, { token: resp.data.token });
-    this.setToken(resp.data.token);
-    return this.getToken();
+    this.userStorage.setUser(ADMIN_USERNAME, { token: resp.data.token });
+    return this.userStorage.getToken(ADMIN_USERNAME);
   }
 
-  removeToken() {
-    this.token = null;
+  removeToken(userName?: string) {
+    this.userStorage.removeToken(userName);
   }
 
-  getToken() {
-    return this.getConvertedToken();
+  async getToken(userName?: string) {
+    if (!this.userStorage.getToken(userName)) {
+      await this.signInAsAdminApi();
+    }
+    return this.userStorage.getToken(userName);
   }
 
-  private setToken(token: string) {
-    this.token = token;
-  }
-
-  private getConvertedToken() {
-    return `Bearer ${this.token}`;
+  setToken(token: string, username?: string) {
+    this.userStorage.setToken({ token }, username);
   }
 }
 

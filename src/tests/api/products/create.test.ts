@@ -1,21 +1,18 @@
 import { generateNewProduct } from 'data/products/productGeneration';
 import { test } from 'fixtures/common/services.fixture';
-import { ADMIN_PASSWORD, ADMIN_USERNAME } from 'config/environment';
 import { IProductFromResponse } from 'types/products/product.types';
 import { validateResponseWithSchema } from 'utils/validations/apiValidation';
 import { createdProductSchema } from 'data/schema/product.schema';
 import { HTTP_STATUS_CODES } from 'data/http/statusCodes';
 import { expect } from '@playwright/test';
+import signInService from '../../../api/services/signIn.service';
 
 test.describe('[API]. [Products]', () => {
   const createdProducts: IProductFromResponse[] = [];
-  let token: string = '';
+  let token: string;
 
-  test.beforeAll(async ({ SignInClient }) => {
-    const signInResponse = await SignInClient.login({
-      data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD },
-    });
-    token = signInResponse.data.token;
+  test.beforeAll('Prepare token', async () => {
+    token = await signInService.signInAsAdminApi();
   });
 
   test('Create smoke product', async ({ ProductsClient }) => {

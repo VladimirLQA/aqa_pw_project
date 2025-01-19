@@ -1,8 +1,7 @@
-import { SalesPortalPage } from '../salesPortal.page';
+import { UniqueElement } from '../salesPortal.page';
 
-export class BaseModalPage extends SalesPortalPage {
+export abstract class BaseModalPage extends UniqueElement {
   readonly 'Close modal button' = 'button.btn-close';
-
   readonly 'Cancel modal button' = '//button[.="Cancel"]';
 
   async clicOnCloseModalButton() {
