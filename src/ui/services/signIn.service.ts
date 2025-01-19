@@ -39,7 +39,7 @@ export class SignInService extends SalesPortalService {
     const response = await this.basePage.interceptResponse<ILoginResponse>(
       url, this.clickSignInButton.bind(this),
     );
-    return response.data.token;
+    return response.headers['authorization'] as string;
   }
 
   private async clickSignInButton() {

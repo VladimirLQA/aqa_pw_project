@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test';
+import expect, { test as base } from '@playwright/test';
 import { apiConfig } from '../../api/config/apiConfig';
 import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 

@@ -7,7 +7,6 @@ test.only('......', async (
 ) => {
   await signInService.openSalesPortal();
   await signInService.loginAsAdmin();
-  await homeService.openProductsPage(); // at this step I'd like to get mocked data, because the browser calls the specified endpoint in handler
-
+  await homeService.openProductsPage();
   await page.pause();
 });
