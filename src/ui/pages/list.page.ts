@@ -1,5 +1,6 @@
-import { SalesPortalPage } from './salesPortal.page';
-import { clients, DataClients } from '../../api/clients';
+import { UniqueElement } from './salesPortal.page';
+import { clients } from '../../api/clients';
+import { UsersStorage } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
@@ -7,9 +8,11 @@ import { asyncForEach } from '../../utils/array/forEach';
 import { asyncMap } from '../../utils/array/map';
 import signInService from '../../api/services/signIn.service';
 
-export class ListPage extends SalesPortalPage {
-  protected readonly 'Table row selector' = (entityName: string) => this.findElement(`//tr[./td[text()="${entityName}"]]`);
-  protected readonly 'Actions by entity name selector' = (entityName: string) =>
+export abstract class ListPage extends UniqueElement {
+  readonly 'Table row selector' = (entityName: string) =>
+    this.findElement(`//tr[./td[text()="${entityName}"]]`);
+
+  readonly 'Actions by entity name selector' = (entityName: string) =>
     `${this['Table row selector'](entityName)}/td[5]`;
 
   readonly 'Details button by entity name' = (entityName: string) =>
@@ -22,6 +25,7 @@ export class ListPage extends SalesPortalPage {
     this.findElement(`${this['Actions by entity name selector'](entityName)}/button[@title="Delete"]`);
 
   readonly 'Table columns names row' = (pageName: string) => this.findElement(`#table-${pageName} thead th`);
+
   readonly "Table row values without 'style' attr" = (pageName: string) =>
     this.findElement(`//table[@id='table-${pageName}']//tbody//tr[not(@style)]`);
 
@@ -33,7 +37,7 @@ export class ListPage extends SalesPortalPage {
   readonly 'Search button' = (pageName: string) => this.findElement(`#search-${pageName}`);
   readonly 'Search input field' = this.findElement('input[type=search]');
 
-  async getApiMappedData(pageName: keyof DataClients) {
+  async getApiMappedData(pageName: keyof typeof clients) {
     // @ts-expect-error A TS error is expected due to received 'union type'
     const data = (await clients[pageName].getAll({ token: signInService.getToken() }))
       .data[capitalize(pageName) as TListPageNames];

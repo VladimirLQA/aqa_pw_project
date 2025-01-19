@@ -9,7 +9,7 @@ const moduleDetailsValues = {
 };
 
 export class DetailsModalPage extends BaseModalPage {
-  protected readonly uniqueElement = '//h5[contains(text(), "Details)]';
+  readonly uniqueElement = '//h5[contains(text(), "Details)]';
 
   readonly 'Edit modal button' =
     (module: 'Customer' | 'Products') => `//button[.="Edit ${module}"]`;

@@ -1,12 +1,15 @@
-import { HomePage } from '../pages/homePage.page';
+import { ETotalHomeMetric, HomePage } from '../pages/homePage.page';
 import { ProductsListPage } from '../pages/products/productsList.page';
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import { SalesPortalService } from './salesPortal.service';
 
 export class HomeService extends SalesPortalService {
   private homePage = new HomePage(this.page);
-
   private productsListPage = new ProductsListPage(this.page);
+
+  async getMetric(metric: ETotalHomeMetric) {
+    return await this.homePage.getMetricValue(metric);
+  }
 
   @logStep('Open products page')
   async openProductsPage() {

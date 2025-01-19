@@ -37,4 +37,13 @@ export interface IProductFromResponse extends IProduct {
 
 export interface IProductResponse { Product: IProductFromResponse }
 
-export interface IProductsResponse { Products: IProductFromResponse[] }
+export interface IProductsResponse {
+  Products: IProductFromResponse[];
+}
+
+export type AddProductFields =
+  | 'Name input'
+  | 'Manufacturer dropdown'
+  | 'Price input'
+  | 'Amount input'
+  | 'Notes textarea';

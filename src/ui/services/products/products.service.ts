@@ -8,7 +8,6 @@ import { ListService } from '../list.service';
 
 export class ProductsListService extends ListService {
   private productsPage = new ProductsListPage(this.page);
-
   private addNewProductPage = new AddNewProductPage(this.page);
 
   @logStep('Open Add New Product page')

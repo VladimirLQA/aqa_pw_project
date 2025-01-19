@@ -16,11 +16,7 @@ export default [
       ],
       '@stylistic/js/lines-between-class-members': [
         'error',
-        {
-          enforce: [
-            { blankLine: 'always', prev: 'method', next: 'method' },
-          ],
-        },
+        { enforce: [{ blankLine: 'always', prev: 'method', next: 'method' }] },
       ],
       '@stylistic/js/multiline-ternary': ['error', 'always-multiline'],
       '@stylistic/js/newline-per-chained-call': ['error', { ignoreChainWithDepth: 2 }],
@@ -56,6 +52,13 @@ export default [
         { allowTemplateLiterals: true, avoidEscape: true },
       ],
       'no-this-before-super': 'error',
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+        },
+      ],
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-unsafe-function-type': 'off',
       // '@typescript-eslint/no-unused-expressions': [
