@@ -62,7 +62,7 @@ class CustomersClient {
   }
 
   @logStep('Update customer via API')
-//  data: ICustomer & { _id: string }, token: string
+  //  data: ICustomer & { _id: string }, token: string
   async update(params: RequestParams<ICustomerFromResponse>) {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Customers,

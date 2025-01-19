@@ -49,7 +49,12 @@ export class AddNewProductPage extends SalesPortalPage {
     const response = await this.interceptResponse<IProductResponse>(
       url, this.clickOnSaveNewProductButton.bind(this),
     );
-    validateResponse(response, HTTP_STATUS_CODES.CREATED, true, null);
+    validateResponse({
+      response,
+      status: HTTP_STATUS_CODES.CREATED,
+      IsSuccess: true,
+      ErrorMessage: null,
+    });
     return response;
   }
 }
