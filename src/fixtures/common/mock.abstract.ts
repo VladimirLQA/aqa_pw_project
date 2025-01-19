@@ -1,11 +1,7 @@
-/* eslint-disable max-classes-per-file */
-
 import { Page, test as base } from '@playwright/test';
 import { apiConfig } from '../../api/config/apiConfig';
 import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 import { Method } from '../../types/api/apiClient.types';
-
-const nock = require('nock');
 
 export interface MockOptions<T = any> {
   url: string;
@@ -27,9 +23,7 @@ export class UIMock extends Mock {
   }
 
   public async modifyResponse<T>(options: MockOptions<T>) {
-    const {
-      url, body, statusCode, headers, baseURL,
-    } = options;
+    const { url, body, statusCode, headers, baseURL, } = options;
     await this.page.route(`**${url}`, async (route, request) => {
       // if (request.method() === method) {}
       await route.fulfill({
@@ -41,25 +35,8 @@ export class UIMock extends Mock {
   }
 }
 
-export class ApiMock extends Mock {
-  private mock = nock;
-
-  public async modifyResponse<T>(options: MockOptions<T>): Promise<void> {
-    const {
-      url, method, body, statusCode, headers, params, baseURL,
-    } = options;
-
-    this.mock(baseURL)
-      .intercept(url, method)
-      .query(params ?? {})
-      .reply(statusCode, body, headers ?? {});
-  }
-}
-
 export class MockOptionsBuilder<T = any> {
-  private options: Partial<MockOptions<T>> = {
-    baseURL: apiConfig.baseURL,
-  };
+  private options: Partial<MockOptions<T>> = { baseURL: apiConfig.baseURL, };
 
   withBody(body: T): this {
     this.options.body = body;
@@ -101,18 +78,6 @@ export class MockOptionsBuilder<T = any> {
   }
 }
 
-// class PlaywrightMockBuilder<T> extends MockBuilder<T> {
-//   withResponseDelay(ms: number): this {
-//     return this;
-//   }
-// }
-
-// class NockMockBuilder<T> extends MockBuilder<T> {
-//   withPersist(persist: boolean): this {
-//     return this;
-//   }
-// }
-
 export class MockService {
   constructor(private mock: Mock) {}
 
@@ -134,14 +99,3 @@ export const test = base.extend<IMockService>({
     //   : new MockService(new UIMock(page)),
   },
 });
-
-// ui mock will be used
-// test('', async ({ mock }) => {
-//   const opts = new MockOptionsBuilder()
-//     .withUrl('test/url')
-//     .withMethod('get')
-//     .withStatusCode(HTTP_STATUS_CODES.ALREADY_EXISTS)
-//     .create();
-
-//   await mock.modifyResponse(opts);
-// });

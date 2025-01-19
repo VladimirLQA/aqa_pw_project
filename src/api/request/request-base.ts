@@ -9,7 +9,8 @@ export abstract class BaseApiClient {
   protected options: IRequestOptions | null;
 
   /**
-   * Transforms requestOptions from IRequestOptions to satisfy the api client options type based on the requestType field of requestOptions
+   * Transforms requestOptions from IRequestOptions to satisfy the api client options type based on
+   * the requestType field of requestOptions
    */
   protected abstract transformRequestOptions(): void;
 
@@ -60,10 +61,8 @@ export abstract class BaseApiClient {
   }
 
   private secureCheck() {
-    fieldsToHideInReport.forEach(
-      (fieldToHide) =>
-        this.options && hideValueInObject(this.options, fieldToHide),
-    );
+    fieldsToHideInReport.forEach((fieldToHide) =>
+      this.options && hideValueInObject(this.options, fieldToHide));
   }
 
   private async logRequest() {

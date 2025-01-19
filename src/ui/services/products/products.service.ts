@@ -18,8 +18,7 @@ export class ProductsListService extends ListService {
   }
 
   async getTableDataByName(productName: string) {
-    const createdProductData =
-      await this.productsPage.getTableDataByName(productName);
+    const createdProductData = await this.productsPage.getTableDataByName(productName);
     return createdProductData;
   }
 

@@ -9,9 +9,7 @@ export interface IValidateResponse extends Partial<IResponseFields> {
   status: TGetObjectValues<typeof HTTP_STATUS_CODES>;
 }
 
-export interface IValidateResponseSchema extends IValidateResponse {
-  schema: object;
-}
+export interface IValidateResponseSchema extends IValidateResponse {schema: object;}
 
 export const validateResponse = (info: IValidateResponse) => {
   expect(info.response.status).toBe(info.status);
@@ -36,9 +34,7 @@ export const validateSchema = (response: IResponse, schema: object) => {
 export const validateResponseWithSchema = (info: IValidateResponseSchema) => {
   validateSchema(info.response, info.schema);
   validateResponse({
-    response: info.response,
-    status: info.status,
-    IsSuccess: info.IsSuccess,
-    ErrorMessage: info.ErrorMessage,
+    response: info.response, status: info.status,
+    IsSuccess: info.IsSuccess, ErrorMessage: info.ErrorMessage,
   });
 };

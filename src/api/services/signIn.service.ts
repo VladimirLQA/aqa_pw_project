@@ -9,9 +9,8 @@ class SignInApiService {
   @logStep('Sign in as Admin via API')
   async signInAsAdminApi() {
     const resp = await this.client.login(
-      { data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD } },
-    );
-    this.userStorage.setUser(ADMIN_USERNAME, { token: resp.data.token });
+      { data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD } });
+    this.userStorage.setUser(ADMIN_USERNAME, { token: resp.headers?.authorization as string });
     return this.userStorage.getToken(ADMIN_USERNAME);
   }
 

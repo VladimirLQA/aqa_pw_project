@@ -13,3 +13,5 @@ export const clients = {
   customers: customerClient,
   signIn: signInClient,
 };
+
+export type DataClients = Omit<typeof clients, 'signIn'>;

@@ -19,13 +19,11 @@ export interface IResponse<T = any> {
 }
 
 export interface RequestParams<T> {
-  data: T;
+  data?: T;
   token?: string;
 }
 
-export type Id = {
-  _id: string;
-};
+export type Id = { _id: string };
 
 // export interface IPostRequestParams<T> {
 //   data: T;

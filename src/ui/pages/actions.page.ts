@@ -10,17 +10,11 @@ import { waitUntil } from '../../utils/utils';
 import { PageHolder } from './pageHolder.page';
 import { asyncForEach } from '../../utils/array/forEach';
 
-export interface IOptions {
-  timeout?: number;
-}
+export interface IOptions {timeout?: number;}
 
-export interface TSecretValue extends IOptions {
-  isSecret: boolean;
-}
+export interface TSecretValue extends IOptions {isSecret: boolean;}
 
-export interface IOptionsWithState extends IOptions {
-  state?: ElementState;
-}
+export interface IOptionsWithState extends IOptions {state?: ElementState;}
 
 export abstract class ActionsPage extends PageHolder {
   findElement(selectorOrElement: string | Locator) {

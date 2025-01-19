@@ -43,8 +43,7 @@ export class HomePage extends UniqueElement {
     return value;
   }
 
-  readonly 'Sidebar button by name' = (name: 'Products' | 'Customers' | 'Orders' | 'Home') =>
-    `//a[text()[normalize-space() = '${name}']]`;
+  readonly 'Sidebar button by name' = (name: 'Products' | 'Customers' | 'Orders' | 'Home') => `a[name="${name}"]`;
 
   async clickOnViewDetailsButton(moduleName: 'Products' | 'Customers' | 'Orders') {
     await this.clickOn(this[`${moduleName} view details button`]);

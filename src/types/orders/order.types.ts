@@ -108,26 +108,18 @@ export interface IDeliveryScheduleHistory {
   street: IOrderHistoryPreviousUpdated;
 }
 
-export interface IOrderId {
-  _id?: string;
-}
+export interface IOrderId {_id?: string;}
 
 export interface IOrdersRequest extends IOrderId {
   customer: string;
   products: string[];
 }
 
-export interface IOrderFromResponse extends IOrder {
-  readonly _id: string;
-}
+export interface IOrderFromResponse extends IOrder {readonly _id: string;}
 
-export interface IOrderResponseData extends IResponse {
-  Order: IOrderFromResponse;
-}
+export interface IOrderResponseData extends IResponse {Order: IOrderFromResponse;}
 
-export interface IOrdersResponseData extends IResponse {
-  Orders: IOrderFromResponse[];
-}
+export interface IOrdersResponseData extends IResponse {Orders: IOrderFromResponse[];}
 
 export interface ICommentRequest extends IOrderId {
   comments: {
@@ -136,13 +128,9 @@ export interface ICommentRequest extends IOrderId {
   };
 }
 
-export interface IOrderStatusRequest extends IOrderId {
-  status: ORDER_STATUSES;
-}
+export interface IOrderStatusRequest extends IOrderId {status: ORDER_STATUSES;}
 
-export interface IOrderDeliveryRequest extends IOrderId {
-  delivery: IDelivery;
-}
+export interface IOrderDeliveryRequest extends IOrderId {delivery: IDelivery;}
 
 export interface IOrderData {
   orderId: string;

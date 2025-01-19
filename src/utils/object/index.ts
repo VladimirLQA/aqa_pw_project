@@ -8,7 +8,9 @@ export const updateValueInObject =
         updateValueInObject(obj[key], keyToFind, newValue);
       } else if (key === keyToFind) {
       // If the key matches, update its value
-        typeof newValue === 'function' ? (obj[key] = newValue(obj[key])) : (obj[key] = newValue);
+        typeof newValue === 'function'
+          ? (obj[key] = newValue(obj[key]))
+          : (obj[key] = newValue);
       }
     }
   };
@@ -17,8 +19,9 @@ export const hideValueInObject = (obj: object, keyToFind: string) =>
   updateValueInObject(obj, keyToFind, hideSecretData);
 
 export const getRandomObjectValue =
-  <T>(object: T, random = Math.random) => {
-    const values = Object.values(object as object);
+  <T extends Record<keyof T, T[keyof T]>>
+  (object: T, random = Math.random) => {
+    const values = Object.values(object);
     const randomIdx = Math.floor(random() * values.length);
-    return values[randomIdx];
+    return values[randomIdx] as T[keyof T];
   };

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { IProduct, MANUFACTURERS } from 'types/products/product.types';
-import { getRandomObjectValue } from 'utils/object/index';
+import { IProduct, MANUFACTURERS } from '../../types/products/product.types';
+import { getRandomObjectValue } from '../../utils/object';
 
 export function generateNewProduct(customProductFields?: Partial<IProduct>) {
   const product: IProduct = {
@@ -12,4 +12,4 @@ export function generateNewProduct(customProductFields?: Partial<IProduct>) {
     ...customProductFields,
   };
   return product;
-}
+};

@@ -3,6 +3,4 @@ export interface IUserCredentials {
   password: string;
 }
 
-export type ILoginResponse = {
-  token: string;
-};
+export type ILoginResponse = {token: string;};

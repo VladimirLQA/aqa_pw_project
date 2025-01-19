@@ -59,6 +59,15 @@ export default [
           allowTernary: true,
         },
       ],
+      '@typescript-eslint/no-unused-expressions': 0,
+      '@typescript-eslint/no-unsafe-function-type': 'off',
+      // '@typescript-eslint/no-unused-expressions': [
+      //   'error',
+      //   {
+      //     allowShortCircuit: true,
+      //     allowTernary: true,
+      //   },
+      // ],
       // // '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
       // '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
     },

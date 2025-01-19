@@ -17,13 +17,8 @@ export interface ICustomerFromResponse extends ICustomer {
   createdOn: string;
 }
 
-export interface ICustomerResponse extends IResponseFields {
-  Customer: ICustomerFromResponse;
-}
-
-export interface ICustomersResponse extends IResponseFields {
-  Customers: ICustomerFromResponse[];
-}
+export interface ICustomerResponse extends IResponseFields { Customer: ICustomerFromResponse }
+export interface ICustomersResponse extends IResponseFields { Customers: ICustomerFromResponse[] }
 
 export const COUNTRY = {
   USA: 'USA',

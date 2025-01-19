@@ -30,7 +30,7 @@ class CustomersClient {
   @logStep('Get customer by id via API')
   async getById(params: RequestParams<Id>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints['Get Customer By Id'](params.data._id),
+      url: apiConfig.baseURL + apiConfig.endpoints['Get Customer By Id'](params.data!._id),
       options: {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
@@ -71,7 +71,7 @@ class CustomersClient {
   @logStep('Delete customer via API')
   async delete(params: RequestParams<Id>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints['Get Customer By Id'](params.data._id),
+      url: apiConfig.baseURL + apiConfig.endpoints['Get Customer By Id'](params.data!._id),
       options: {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', Authorization: params.token ?? await signInService.getToken() },
