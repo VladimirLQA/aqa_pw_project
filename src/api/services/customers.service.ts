@@ -5,10 +5,10 @@ import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import signInApiService from './signIn.service';
 import { ICustomerFromResponse } from '../../types/customers/customers.types';
-import { clients } from '../clients';
+import { controllers } from '../controllers';
 
 export class CustomersApiService {
-  constructor(private client = clients.customers) { }
+  constructor(private controller = controllers.customers) { }
 
   @logStep('Create {amount} customers')
   async populateCustomers(amount: number = 1) {
@@ -16,7 +16,7 @@ export class CustomersApiService {
 
     for (let i = 1; i <= amount; i++) {
       const cutomerToCreate = generateNewCustomer();
-      const createdCustomer = await this.client.create({ data: cutomerToCreate, token });
+      const createdCustomer = await this.controller.create({ data: cutomerToCreate, token });
 
       expect(createdCustomer.status).toBe(HTTP_STATUS_CODES.CREATED);
       CustomersStorage.addEntity(createdCustomer.data.Customer);
@@ -28,7 +28,7 @@ export class CustomersApiService {
     const token = await signInApiService.getToken();
 
     for (const customer of CustomersStorage.getAllEntities()) {
-      const response = await this.client.delete({ data: { _id: customer._id }, token });
+      const response = await this.controller.delete({ data: { _id: customer._id }, token });
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     }
   }
@@ -36,10 +36,10 @@ export class CustomersApiService {
   @logStep('Create {amount} customers')
   async deleteCreatedCustomer(email: string) {
     const token = await signInApiService.getToken();
-    const customers = await this.client.getAll({ token });
+    const customers = await this.controller.getAll({ token });
     const customerToDelete = customers.data.Customers.find((c: ICustomerFromResponse) => c.email === email);
     if (customerToDelete) {
-      const response = await this.client.delete({ data: { _id: customerToDelete._id }, token });
+      const response = await this.controller.delete({ data: { _id: customerToDelete._id }, token });
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     } else {
       throw new Error(`Customer with email: '${email}' was not found`);

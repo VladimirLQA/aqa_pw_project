@@ -13,13 +13,13 @@ export class ListService extends SalesPortalService {
     await this.products.clickOnDetailsEntityButton(entityName);
   }
 
-  async expectInfoInDetailsModal<T extends { name: string }>(entityInfo: T) {
+  async checkInfoInDetailsModal<T extends { name: string }>(entityInfo: T) {
     await this.openDetailsModal(entityInfo.name);
     const acutalModalData = await this.detailsModalPage.getDetailsModalData<T>();
     expect(acutalModalData).toEqual(entityInfo);
   }
 
-  async expectTableData(pageName: 'products' | 'customers') {
+  async checkTableData(pageName: 'products' | 'customers') {
     let expected = await this[pageName].getApiMappedData(pageName);
     const chips = await this[pageName].getListOfChipButtons(pageName);
     if (chips.search || chips.quickFilters?.length) {

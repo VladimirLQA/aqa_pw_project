@@ -1,10 +1,10 @@
-import { clients } from '../clients/index';
 import { ADMIN_USERNAME, ADMIN_PASSWORD } from '../../config/environment';
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import { UsersStorage } from '../../utils/storages';
+import { controllers } from '../controllers';
 
 class SignInApiService {
-  constructor(private client = clients?.signIn, private userStorage = UsersStorage) {}
+  constructor(private client = controllers?.signIn, private userStorage = UsersStorage) {}
 
   @logStep('Sign in as Admin via API')
   async signInAsAdminApi() {

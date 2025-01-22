@@ -1,19 +1,18 @@
 import { test as base } from '@playwright/test';
-import { ApiClients } from 'api/clients/index';
-import signInClient from '../../api/clients/signIn.client';
-import productClient from '../../api/clients/product.client';
-import customerClient from '../../api/clients/customer.client';
+import { ApiControllers, controllers } from '../../api/controllers';
 
-export const test = base.extend<ApiClients>({
-  SignInClient: async ({}, use) => {
-    await use(signInClient);
+const { signIn, customers, products } = controllers;
+
+export const test = base.extend<ApiControllers>({
+  SignInController: async ({}, use) => {
+    await use(signIn);
   },
 
-  ProductsClient: async ({}, use) => {
-    await use(productClient);
+  ProductsController: async ({}, use) => {
+    await use(products);
   },
 
-  CustomersClient: async ({}, use) => {
-    await use(customerClient);
+  CustomersController: async ({}, use) => {
+    await use(customers);
   },
 });
