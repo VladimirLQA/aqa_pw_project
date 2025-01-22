@@ -1,5 +1,5 @@
 export const apiConfig = {
-  baseURL: 'https://aqa-course-project.app/',
+  baseURL: 'https://aqa-course-project.app',
   endpoints: {
     Login: '/api/login/',
     Products: '/api/products',

@@ -12,7 +12,7 @@ export class CustomersApiService {
 
   @logStep('Create {amount} customers')
   async populateCustomers(amount: number = 1) {
-    const token = await signInApiService.signInAsAdminApi();
+    const token = await signInApiService.getToken();
 
     for (let i = 1; i <= amount; i++) {
       const cutomerToCreate = generateNewCustomer();
@@ -25,7 +25,7 @@ export class CustomersApiService {
 
   @logStep('Delete customer')
   async deleteCreatedCustomers() {
-    const token = await signInApiService.signInAsAdminApi();
+    const token = await signInApiService.getToken();
 
     for (const customer of CustomersStorage.getAllEntities()) {
       const response = await this.client.delete({ data: { _id: customer._id }, token });
@@ -35,7 +35,7 @@ export class CustomersApiService {
 
   @logStep('Create {amount} customers')
   async deleteCreatedCustomer(email: string) {
-    const token = await signInApiService.signInAsAdminApi();
+    const token = await signInApiService.getToken();
     const customers = await this.client.getAll({ token });
     const customerToDelete = customers.data.Customers.find((c: ICustomerFromResponse) => c.email === email);
     if (customerToDelete) {

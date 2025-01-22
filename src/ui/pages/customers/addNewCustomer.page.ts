@@ -1,4 +1,4 @@
-import { AddEditCustomerPage } from "./addEditCustomer.page";
+import { AddEditCustomerPage } from './addEditCustomer.page';
 
 export class AddCustomerPage extends AddEditCustomerPage {
   readonly uniqueElement: string = '//h2[.="Add New Customer "]';

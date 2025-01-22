@@ -1,6 +1,5 @@
 import { UniqueElement } from './salesPortal.page';
 import { clients } from '../../api/clients';
-import { UsersStorage } from '../../utils/storages';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
@@ -9,8 +8,7 @@ import { asyncMap } from '../../utils/array/map';
 import signInService from '../../api/services/signIn.service';
 
 export abstract class ListPage extends UniqueElement {
-  readonly 'Table row selector' = (entityName: string) =>
-    this.findElement(`//tr[./td[text()="${entityName}"]]`);
+  readonly 'Table row selector' = (entityName: string) => `//tr[./td[text()="${entityName}"]]`;
 
   readonly 'Actions by entity name selector' = (entityName: string) =>
     `${this['Table row selector'](entityName)}/td[5]`;
@@ -36,6 +34,10 @@ export abstract class ListPage extends UniqueElement {
   readonly 'Clear filters button' = this.findElement('#clear-filters');
   readonly 'Search button' = (pageName: string) => this.findElement(`#search-${pageName}`);
   readonly 'Search input field' = this.findElement('input[type=search]');
+
+  async clickOnDetailsEntityButton(entityName: string) {
+    await this.clickOn(this['Details button by entity name'](entityName));
+  }
 
   async getApiMappedData(pageName: keyof typeof clients) {
     // @ts-expect-error A TS error is expected due to received 'union type'

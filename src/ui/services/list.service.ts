@@ -2,12 +2,24 @@ import { expect } from '@playwright/test';
 import { SalesPortalService } from './salesPortal.service';
 import { ProductsListPage } from '../pages/products/productsList.page';
 import { CustomersListPage } from '../pages/customers/customersList.page';
+import { DetailsModalPage } from '../pages/modals/details.page';
 
 export class ListService extends SalesPortalService {
   protected products = new ProductsListPage(this.page);
   protected customers = new CustomersListPage(this.page);
+  protected detailsModalPage = new DetailsModalPage(this.page);
 
-  async verifyTableData(pageName: 'products' | 'customers') {
+  async openDetailsModal(entityName: string) {
+    await this.products.clickOnDetailsEntityButton(entityName);
+  }
+
+  async expectInfoInDetailsModal<T extends { name: string }>(entityInfo: T) {
+    await this.openDetailsModal(entityInfo.name);
+    const acutalModalData = await this.detailsModalPage.getDetailsModalData<T>();
+    expect(acutalModalData).toEqual(entityInfo);
+  }
+
+  async expectTableData(pageName: 'products' | 'customers') {
     let expected = await this[pageName].getApiMappedData(pageName);
     const chips = await this[pageName].getListOfChipButtons(pageName);
     if (chips.search || chips.quickFilters?.length) {

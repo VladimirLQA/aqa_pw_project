@@ -5,10 +5,14 @@ import { logStep } from '../../../utils/reporter/decorators/logStep';
 import { IProduct } from '../../../types/products/product.types';
 import { pick } from '../../../utils/utils';
 import { ListService } from '../list.service';
+import { DetailsModalPage } from '../../pages/modals/details.page';
 
 export class ProductsListService extends ListService {
   private productsPage = new ProductsListPage(this.page);
   private addNewProductPage = new AddNewProductPage(this.page);
+  private detailModalPage = new DetailsModalPage(this.page);
+
+  // Soap25141
 
   @logStep('Open Add New Product page')
   async openAddNewProductPage() {
@@ -23,19 +27,19 @@ export class ProductsListService extends ListService {
   }
 
   @logStep('Validate product in table')
-  async verifyProductInTable(product: IProduct) {
+  async expectProductInTable(product: IProduct) {
     const actualProduct =
       await this.productsPage.getTableDataByName(product.name);
     const expectedProduct = pick(product, ['name', 'price', 'manufacturer']);
     expect(actualProduct).toMatchObject(expectedProduct);
   }
 
-  @logStep('Click on filter button')
-  async clickOnFilterButton() {
+  @logStep()
+  async openFilterModal() {
     await this.productsPage.clickOnFilterButton();
   }
 
-  @logStep('Apply quick filters')
+  @logStep()
   async apllyQuickFilters(filters: string[]) {
     await this.productsPage.checkFiltersBox(filters);
     await this.productsPage.clickOnApplybutton();
