@@ -8,41 +8,37 @@ import { ListService } from '../list.service';
 import { DetailsModalPage } from '../../pages/modals/details.page';
 
 export class ProductsListService extends ListService {
-  private productsPage = new ProductsListPage(this.page);
   private addNewProductPage = new AddNewProductPage(this.page);
-  private detailModalPage = new DetailsModalPage(this.page);
-
-  // Soap25141
 
   @logStep('Open Add New Product page')
   async openAddNewProductPage() {
-    await this.productsPage.clickOnAddNewProductButton();
-    await this.productsPage.waitForSpinnerToHide();
+    await this.products.clickOnAddNewProductButton();
+    await this.products.waitForSpinnerToHide();
     await this.addNewProductPage.waitForOpened();
   }
 
   async getTableDataByName(productName: string) {
-    const createdProductData = await this.productsPage.getTableDataByName(productName);
+    const createdProductData = await this.products.getTableDataByName(productName);
     return createdProductData;
   }
 
   @logStep('Validate product in table')
   async expectProductInTable(product: IProduct) {
     const actualProduct =
-      await this.productsPage.getTableDataByName(product.name);
+      await this.products.getTableDataByName(product.name);
     const expectedProduct = pick(product, ['name', 'price', 'manufacturer']);
     expect(actualProduct).toMatchObject(expectedProduct);
   }
 
   @logStep()
   async openFilterModal() {
-    await this.productsPage.clickOnFilterButton();
+    await this.products.clickOnFilterButton();
   }
 
   @logStep()
   async apllyQuickFilters(filters: string[]) {
-    await this.productsPage.checkFiltersBox(filters);
-    await this.productsPage.clickOnApplybutton();
-    await this.productsPage.clickOnSearchButton('products');
+    await this.products.checkFiltersBox(filters);
+    await this.products.clickOnApplybutton();
+    await this.products.clickOnSearchButton('products');
   }
 }
