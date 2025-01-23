@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, expect } from '../base.fixture';
 import { HomeService } from '../../ui/services/home.service';
 import { ProductsListService } from '../../ui/services/products/products.service';
 import { SignInService } from '../../ui/services/signIn.service';

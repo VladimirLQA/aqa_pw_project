@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test';
+import { test as base } from '../base.fixture';
 import { ApiControllers, controllers } from '../../api/controllers';
 
 const { signIn, customers, products } = controllers;
