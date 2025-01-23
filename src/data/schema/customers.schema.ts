@@ -1,4 +1,5 @@
 import { COUNTRY } from '../../types/customers/customers.types';
+import { baseSchemaPart } from './base.schema';
 
 export const CREATE_CUSTOMER_SCHEMA = {
   type: 'object',
@@ -22,8 +23,7 @@ export const CREATE_CUSTOMER_SCHEMA = {
       },
       required: ['_id', 'email', 'flat', 'house', 'country', 'createdOn', 'street', 'city', 'phone'],
     },
-    IsSuccess: { type: 'boolean' },
-    ErrorMessage: { type: ['string', 'null'] },
+    ...baseSchemaPart
   },
   required: ['Customer', 'IsSuccess', 'ErrorMessage'],
 };

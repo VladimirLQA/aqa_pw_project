@@ -1,5 +1,5 @@
 import { IResponse } from '../api/apiClient.types';
-import { TCountry, ICustomerFromResponse } from '../customers/customers.types';
+import { ICustomerFromResponse, COUNTRIES } from '../customers/customers.types';
 import { IProductFromResponse } from '../products/product.types';
 
 export enum LOCATION_TYPE {
@@ -40,7 +40,7 @@ export interface IComment {
 
 export interface IAddress {
   city: string;
-  country: string | TCountry;
+  country: string | COUNTRIES;
   flat: number;
   house: number;
   street: string;

@@ -3,7 +3,7 @@ import { IResponseFields } from '../api/apiClient.types';
 export interface ICustomer {
   email: string;
   name: string;
-  country: TCountry;
+  country: COUNTRIES;
   street: string;
   flat: number;
   city: string;
@@ -20,15 +20,13 @@ export interface ICustomerFromResponse extends ICustomer {
 export interface ICustomerResponse extends IResponseFields { Customer: ICustomerFromResponse }
 export interface ICustomersResponse extends IResponseFields { Customers: ICustomerFromResponse[] }
 
-export const COUNTRY = {
-  USA: 'USA',
-  CANADA: 'Canada',
-  BELARUS: 'Belarus',
-  UKRAINE: 'Ukraine',
-  GERMANY: 'Germany',
-  FRANCE: 'France',
-  GREATE_BRITAIN: 'Great Britain',
-  RUSSIA: 'Russia',
-} as const;
-
-export type TCountry = typeof COUNTRY[keyof typeof COUNTRY];
+export enum COUNTRIES  {
+  USA = 'USA',
+  CANADA = 'Canada',
+  BELARUS = 'Belarus',
+  UKRAINE = 'Ukraine',
+  GERMANY = 'Germany',
+  FRANCE = 'France',
+  GREATE_BRITAIN = 'Great Britain',
+  RUSSIA = 'Russia',
+};

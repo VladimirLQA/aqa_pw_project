@@ -19,16 +19,16 @@ export const manufacturerNames = [
   'Tesla',
 ] as const;
 
-export const MANUFACTURERS = {
-  APPLE: 'Apple',
-  SAMSUNG: 'Samsung',
-  GOOGLE: 'Google',
-  MICROSOFT: 'Microsoft',
-  SONY: 'Sony',
-  XIAOMI: 'Xiaomi',
-  AMAZON: 'Amazon',
-  TESLA: 'Tesla',
-} as const;
+export enum MANUFACTURERS {
+  APPLE = 'Apple',
+  SAMSUNG = 'Samsung',
+  GOOGLE = 'Google',
+  MICROSOFT = 'Microsoft',
+  SONY = 'Sony',
+  XIAOMI = 'Xiaomi',
+  AMAZON = 'Amazon',
+  TESLA = 'Tesla',
+};
 
 export interface IProductFromResponse extends IProduct {
   _id: string;
