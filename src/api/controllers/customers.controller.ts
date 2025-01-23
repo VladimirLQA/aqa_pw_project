@@ -10,7 +10,7 @@ import {
 import { logStep } from '../../utils/reporter/decorators/logStep';
 import signInService from '../services/signIn.service';
 
-class CustomersClient {
+class CustomersController {
   constructor(private client = apiClient) { }
 
   @logStep('Create customer via API')
@@ -82,4 +82,4 @@ class CustomersClient {
   }
 }
 
-export default new CustomersClient();
+export default new CustomersController();

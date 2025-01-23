@@ -6,7 +6,7 @@ import { logStep } from 'utils/reporter/decorators/logStep';
 import { UsersStorage } from '../../utils/storages';
 import signInService from '../services/signIn.service';
 
-class ProductsClient {
+class ProductsController {
   constructor(private client = apiClient, private userStorage = UsersStorage) { }
 
   @logStep('Get product via API')
@@ -78,4 +78,4 @@ class ProductsClient {
   }
 }
 
-export default new ProductsClient();
+export default new ProductsController();

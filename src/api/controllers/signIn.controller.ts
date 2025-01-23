@@ -4,7 +4,7 @@ import { apiConfig } from 'api/config/apiConfig';
 import apiClient from 'api/request/request-index';
 import { logStep } from 'utils/reporter/decorators/logStep';
 
-class SignInClient {
+class SignInController {
   constructor(private client = apiClient) {}
 
   @logStep('Sign in via API')
@@ -21,4 +21,4 @@ class SignInClient {
     return this.client.sendRequest<ILoginResponse>(options);
   }
 }
-export default new SignInClient();
+export default new SignInController();

@@ -7,6 +7,7 @@ export const apiConfig = {
     Customers: '/api/customers/',
     'Get Customer By Id': (id: string) => `/api/customers/${id}`,
     'Get Order By Id': (id: string) => `/api/orders/${id}`,
+    Orders: '/api/orders',
     'Order Delivery': '/api/orders/delivery',
     'Order Receive': '/api/orders/receive',
     'Order Status': '/api/orders/status',
