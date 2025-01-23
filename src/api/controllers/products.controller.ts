@@ -5,7 +5,7 @@ import apiClient from 'api/request/request-index';
 import { logStep } from 'utils/reporter/decorators/logStep';
 
 class ProductsController {
-  constructor(private client = apiClient) { }
+  constructor(private client = apiClient) {}
 
   @logStep('Get product via API')
   async getById(params: RequestParams<Id>) {

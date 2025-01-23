@@ -8,6 +8,7 @@
     "test:ui": "cross-env TESTS=UI npx playwright test",
     "test:api": "cross-env TESTS=API HEADLESS=true npx playwright test",
     "test:single": "cross-env TESTS=SINGLE HEADLESS=true npx playwright test",
+    "test:tag": "cross-env TESTS=SINGLE HEADLESS=false npx playwright test --grep \"anotherTag|tag\"",
     "report:pw-open": "npx playwright show-report",
     "report:create": "allure generate src/report/allure-results -o src/report/allure-report --clean",
     "report:open": "npm run report:create && allure open src/report/allure-report",

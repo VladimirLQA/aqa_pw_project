@@ -1,5 +1,5 @@
 import { UniqueElement } from './salesPortal.page';
-import { clients } from '../../api/clients';
+import { controllers } from '../../api/controllers/index';
 import { keyMapper } from '../../utils/mapper';
 import { capitalize } from '../../utils/utils';
 import { IChipsFilterOptions, TListPageNames } from '../../types/common.types';
@@ -39,9 +39,9 @@ export abstract class ListPage extends UniqueElement {
     await this.clickOn(this['Details button by entity name'](entityName));
   }
 
-  async getApiMappedData(pageName: keyof typeof clients) {
+  async getApiMappedData(pageName: keyof typeof controllers) {
     // @ts-expect-error A TS error is expected due to received 'union type'
-    const data = (await clients[pageName].getAll({ token: signInService.getToken() }))
+    const data = (await controllers[pageName].getAll({ token: signInService.getToken() }))
       .data[capitalize(pageName) as TListPageNames];
 
     return asyncMap(data, (entity: { [key: string]: any }) => {

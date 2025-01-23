@@ -8,7 +8,7 @@ class SignInController {
   constructor(private client = apiClient) {}
 
   @logStep('Sign in via API')
-  async login(params: RequestParams<IUserCredentials>) {
+  async login(params: Omit<RequestParams<IUserCredentials>, 'token'>) {
     const options: IRequestOptions = {
       url: apiConfig.baseURL + apiConfig.endpoints.Login,
       options: {

@@ -2,6 +2,7 @@ import fieldsToHideInReport from 'data/report/fieldsToHideInReport';
 import { IRequestOptions, IResponse } from 'types/api/apiClient.types';
 import { hideValueInObject } from 'utils/object/index';
 import { BaseReporter } from 'utils/reporter/reporters/baseReporter';
+import { test } from '../../fixtures/base.fixture';
 
 export abstract class BaseApiClient {
   protected response: any;
@@ -31,7 +32,7 @@ export abstract class BaseApiClient {
   protected abstract logError(error: any): void;
 
   // constructor(private reporterService: BaseReporter, private loggerService: Logger) {}
-  constructor(private reporterService: BaseReporter) {
+  constructor(private reporterService: BaseReporter, private testInfo = test.info) {
     this.options = null;
   }
 
