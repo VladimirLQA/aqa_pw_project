@@ -2,11 +2,10 @@ import Ajv from 'ajv';
 import { expect } from '@playwright/test';
 import { IResponse, IResponseFields } from '../../types/api/apiClient.types';
 import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
-import { TGetObjectValues } from '../../types/common.types';
 
 export interface IValidateResponse extends Partial<IResponseFields> {
   response: IResponse;
-  status: TGetObjectValues<typeof HTTP_STATUS_CODES>;
+  status: HTTP_STATUS_CODES;
 }
 
 export interface IValidateResponseSchema extends IValidateResponse {schema: object;}

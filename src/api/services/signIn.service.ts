@@ -1,14 +1,15 @@
 import { ADMIN_USERNAME, ADMIN_PASSWORD } from '../../config/environment';
 import { logStep } from '../../utils/reporter/decorators/logStep';
-import { UsersStorage } from '../../utils/storages';
-import { controllers } from '../controllers';
+import { UsersStorageSingleton } from '../../utils/storages';
+// import { controllers } from '../controllers';
+import signInController from '../controllers/signIn.controller';
 
 class SignInApiService {
-  constructor(private client = controllers?.signIn, private userStorage = UsersStorage) {}
+  constructor(private controller = signInController, private userStorage = UsersStorageSingleton) {}
 
   @logStep('Sign in as Admin via API')
   async signInAsAdminApi() {
-    const resp = await this.client.login(
+    const resp = await this.controller.login(
       { data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD } });
     this.userStorage.setUser(ADMIN_USERNAME, { token: resp.headers?.authorization as string });
     return this.userStorage.getToken(ADMIN_USERNAME);

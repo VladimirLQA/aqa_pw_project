@@ -20,15 +20,11 @@ export interface IResponse<T = any> {
 
 export interface RequestParams<T> {
   data?: T;
-  token?: string;
+  token: string;
 }
 
 export type Id = { _id: string };
-
-// export interface IPostRequestParams<T> {
-//   data: T;
-//   token?: string;
-// }
+export type TBody<T> = { body?: T };
 
 export interface IResponseFields {
   IsSuccess: boolean;

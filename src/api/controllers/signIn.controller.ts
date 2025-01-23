@@ -1,5 +1,5 @@
 import { IRequestOptions, RequestParams } from 'types/api/apiClient.types';
-import { ILoginResponse, IUserCredentials } from 'types/user/user.types';
+import { IUserCredentials } from 'types/user/user.types';
 import { apiConfig } from 'api/config/apiConfig';
 import apiClient from 'api/request/request-index';
 import { logStep } from 'utils/reporter/decorators/logStep';
@@ -18,7 +18,7 @@ class SignInController {
       },
       requestType: 'json',
     };
-    return this.client.sendRequest<ILoginResponse>(options);
+    return this.client.sendRequest(options);
   }
 }
 export default new SignInController();

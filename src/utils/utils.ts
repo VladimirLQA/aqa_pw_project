@@ -90,7 +90,7 @@ export const getElementSelector = (item: Locator | string) => {
   return item;
 };
 
-export const sortById = <T extends { _id: string }>(array: T[]) =>
+export const sortByID = <T extends { _id: string }>(array: T[]) =>
   array.slice().sort((a, b) => {
     if (a._id.toLowerCase() < b._id.toLowerCase()) return -1;
     if (a._id.toLowerCase() < b._id.toLowerCase()) return 1;

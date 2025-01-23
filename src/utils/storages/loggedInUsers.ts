@@ -6,15 +6,15 @@ export interface ILoggedInUser {
   token: string;
 }
 
-export class LoggedInUsers {
+export class LoggedInUsersSingleton {
   private users: ILoggedInUser[] = [];
-  private static instance: LoggedInUsers;
+  private static instance: LoggedInUsersSingleton;
 
   constructor() {
-    if (LoggedInUsers.instance) {
-      return LoggedInUsers.instance;
+    if (LoggedInUsersSingleton.instance) {
+      return LoggedInUsersSingleton.instance;
     }
-    LoggedInUsers.instance = this;
+    LoggedInUsersSingleton.instance = this;
   }
 
   setToken(loginResponse: ILoginResponse, username?: string) {

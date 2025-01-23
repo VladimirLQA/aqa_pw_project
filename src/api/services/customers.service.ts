@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { CustomersStorage } from '../../utils/storages/index';
+import { CustomersStorageSingleton } from '../../utils/storages/index';
 import { generateNewCustomer } from '../../data/customers/generateNewCustomer';
 import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 import { logStep } from '../../utils/reporter/decorators/logStep';
@@ -19,7 +19,7 @@ export class CustomersApiService {
       const createdCustomer = await this.controller.create({ data: cutomerToCreate, token });
 
       expect(createdCustomer.status).toBe(HTTP_STATUS_CODES.CREATED);
-      CustomersStorage.addEntity(createdCustomer.data.Customer);
+      CustomersStorageSingleton.addEntity(createdCustomer.data.Customer);
     }
   }
 
@@ -27,7 +27,7 @@ export class CustomersApiService {
   async deleteCreatedCustomers() {
     const token = await signInApiService.getToken();
 
-    for (const customer of CustomersStorage.getAllEntities()) {
+    for (const customer of CustomersStorageSingleton.getAllEntities()) {
       const response = await this.controller.delete({ data: { _id: customer._id }, token });
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     }
@@ -41,6 +41,7 @@ export class CustomersApiService {
     if (customerToDelete) {
       const response = await this.controller.delete({ data: { _id: customerToDelete._id }, token });
       expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
+      return;
     } else {
       throw new Error(`Customer with email: '${email}' was not found`);
     }
