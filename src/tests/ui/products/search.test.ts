@@ -6,11 +6,11 @@ test.describe('test', () => {
   ) => {
     const [p1, p2, ...p] = createdProducts;
     await homeService.openProductsPage();
-    await productListService.clickOnFilterButton();
+    await productListService.openFilterModal();
     await productListService.apllyQuickFilters(
       [p1.manufacturer, p2.manufacturer],
     );
-    await productListService.verifyTableData('products');
+    await productListService.checkTableData('products');
   });
 });
 // TODO rewrite with current form of fixturest
