@@ -4,11 +4,10 @@ import { RequestParams, Id, IRequestOptions } from '../../types/api/apiClient.ty
 import { IOrderResponseData, IOrdersResponseData, IOrdersRequest, ICommentRequest, IOrderStatusRequest, IOrderDeliveryRequest } from '../../types/orders/order.types';
 import { apiConfig } from '../config/apiConfig';
 import signInService from '../services/signIn.service';
-import { OrdersStorage } from '../../utils/storages';
 import apiClient from 'api/request/request-index';
 
 class OrdersController {
-  constructor(private client = apiClient, private ordersStorage = OrdersStorage) { }
+  constructor(private client = apiClient) { }
 
   async get(params: RequestParams<Id>) {
     const options: IRequestOptions = {

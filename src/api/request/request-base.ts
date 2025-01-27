@@ -2,11 +2,10 @@ import fieldsToHideInReport from 'data/report/fieldsToHideInReport';
 import { IRequestOptions, IResponse } from 'types/api/apiClient.types';
 import { hideValueInObject } from 'utils/object/index';
 import { BaseReporter } from 'utils/reporter/reporters/baseReporter';
-import { test } from '../../fixtures/base.fixture';
+import { BaseLogger } from '../../utils/logger/baseLogger';
 
 export abstract class BaseApiClient {
-  protected response: any;
-
+  protected response: IResponse | any;
   protected options: IRequestOptions | null;
 
   /**
@@ -18,7 +17,7 @@ export abstract class BaseApiClient {
   /**
    * Transforms response to IResponse
    */
-  protected abstract transformResponse(): Promise<void>;
+  protected abstract transformResponse(error?: unknown): Promise<void>;
 
   /**
    * Sends request with provided options
@@ -29,10 +28,10 @@ export abstract class BaseApiClient {
    * Logs api errors to console
    * @param error error from your api client
    */
-  protected abstract logError(error: any): void;
+  protected abstract logError(error: unknown): void;
 
   // constructor(private reporterService: BaseReporter, private loggerService: Logger) {}
-  constructor(private reporterService: BaseReporter, private testInfo = test.info) {
+  constructor(private reporterService: BaseReporter, private loggerService: BaseLogger) {
     this.options = null;
   }
 
@@ -48,17 +47,27 @@ export abstract class BaseApiClient {
       this.transformRequestOptions();
       this.response = await this.send();
       await this.transformResponse();
-    } catch (error: any) {
-      if (error.response) this.logError(error);
-      if (this.response.status >= 500) {
-        throw new Error(`Failed to send request. Reason:\n ${(error as Error).message}`);
+      this.logSuccessResponse();
+    } catch (error: unknown) {
+      if (error) {
+        this.logErrorResponse(error);
       }
-      await this.transformResponse();
+      await this.transformResponse(error);
     } finally {
       this.secureCheck();
       await this.logRequest();
     }
     return this.response;
+  }
+
+  private logErrorResponse(error: unknown) {
+    this.loggerService.log(`Error: ${(error as Error).message}`, 'error');
+    this.loggerService.log(`Request URL: [${this.options?.method}] [${this.options?.url}]`, 'error');
+  }
+
+  private logSuccessResponse() {
+    this.loggerService.log(`Response status: [${this.response.status}]`, 'info');
+    this.loggerService.log(`Request URL: [${this.options?.method}] [${this.options?.url}]`, 'info');
   }
 
   private secureCheck() {

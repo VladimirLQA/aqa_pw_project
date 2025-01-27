@@ -1,35 +1,41 @@
 import { request } from '@playwright/test';
 import { BaseApiClient } from 'api/request/request-base';
 import ReporterService from 'utils/reporter/reporters/reporter';
+import { omit } from '../../utils/utils';
+import { apiConfig } from '../config/apiConfig';
+import LoggerService from '../../utils/logger';
 
 class RequestApiClient extends BaseApiClient {
   protected async send() {
-    const apiContext = await request.newContext();
-    const resp = await apiContext.fetch(
-      this.options!.url, this.options!.options,
-    );
-    return resp;
+    const requestContext = await request.newContext({
+      baseURL: this.options?.baseURL ?? apiConfig?.baseURL,
+    });
+    return await requestContext.fetch(this.options!.url, omit(this.options!, ['baseURL', 'url']));
   }
 
   protected transformRequestOptions() {
-    if (this.options?.requestType === 'formData') {
-      // TBD
-    }
+    //
   }
 
   protected async transformResponse() {
-    const transformedResponse = {
-      data: this.options!.options.method === 'DELETE' ? null : await this.response.json(),
+    const contentType = this.response.headers()['content-type'] || '';
+    let body;
+    if (contentType.includes('application/json')) {
+      body = await this.response.json();
+    } else {
+      body = await this.response.text();
+    }
+    this.response = {
       status: this.response.status(),
+      body,
       headers: this.response.headers(),
     };
-    this.response = transformedResponse;
   }
 
   protected logError(error: any) {
     console.log('Error', error.message);
-    console.log('Request URL:', this.options!.options.method, this.options?.url);
+    console.log('Request URL:', this.options?.method, this.options?.url);
   }
 }
 
-export default new RequestApiClient(ReporterService);
+export default new RequestApiClient(ReporterService, LoggerService);
