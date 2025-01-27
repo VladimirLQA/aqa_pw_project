@@ -7,12 +7,12 @@ class HTMLReporter extends BaseReporter {
   protected async reportApiRequestData() {
     await test.step('',
       async () => {
-        await this.testInfo().attach(`Request Headers: [${this.requestOptions?.options.method?.toUpperCase()}] [${this.requestOptions?.url}]`, {
-          body: JSON.stringify(this.requestOptions?.options.headers, null, 2) ?? '',
+        await this.testInfo().attach(`Request Headers: [${this.requestOptions?.method?.toUpperCase()}] [${this.requestOptions?.url}]`, {
+          body: JSON.stringify(this.requestOptions?.headers, null, 2) ?? '',
           contentType: 'application/json'
         });
-        await this.testInfo().attach(`Request Body [${this.requestOptions?.options.method?.toUpperCase()}] [${this.requestOptions?.url}]`, {
-          body: JSON.stringify(this.requestOptions?.options.data, null, 2) ?? '',
+        await this.testInfo().attach(`Request Body [${this.requestOptions?.method?.toUpperCase()}] [${this.requestOptions?.url}]`, {
+          body: JSON.stringify(this.requestOptions?.data, null, 2) ?? '',
           contentType: 'application/json'
         });
       }
@@ -22,11 +22,11 @@ class HTMLReporter extends BaseReporter {
   protected async reportApiResponseData() {
     await test.step('',
       async () => {
-        await this.testInfo().attach(`Response Headers [${this.requestOptions?.options.method?.toUpperCase()}] [${this.response?.status}] [${this.requestOptions?.url}]`, {
+        await this.testInfo().attach(`Response Headers [${this.requestOptions?.method?.toUpperCase()}] [${this.response?.status}] [${this.requestOptions?.url}]`, {
           body: JSON.stringify(this.response?.headers, null, 2) ?? '',
           contentType: 'application/json'
         });
-        await this.testInfo().attach(`Response Body [${this.requestOptions?.options.method?.toUpperCase()}] [${this.response?.status}]  [${this.requestOptions?.url}]`, {
+        await this.testInfo().attach(`Response Body [${this.requestOptions?.method?.toUpperCase()}] [${this.response?.status}]  [${this.requestOptions?.url}]`, {
           body: JSON.stringify(this.response?.data, null, 2) ?? '',
           contentType: 'application/json'
         });

@@ -15,7 +15,8 @@ dotenv.config();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  // globalSetup: require.resolve("./global-setup"),
+  // globalSetup: require.resolve('./global-setup'),
+  // globalTeardown: require.resolve('./global-teardown'),
   updateSnapshots: 'missing',
   testDir: 'src/tests',
   testMatch: suite,
@@ -33,8 +34,9 @@ export default defineConfig({
     [
       'html',
       {
+        outputFolder: 'src/report/html',
         printSteps: true,
-        open: false,
+        open: 'never',
       }
     ],
     [
@@ -43,6 +45,9 @@ export default defineConfig({
         detail: true,
         outputFolder: 'src/report/allure-results',
         suiteTitle: false,
+        environmentInfo: {
+
+        }
       },
     ],
   ],

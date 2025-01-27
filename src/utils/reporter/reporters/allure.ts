@@ -5,17 +5,17 @@ import * as rimraf from 'rimraf';
 class AllureReporter extends BaseReporter {
   protected async reportApiRequestData() {
     await allure.step(
-      `Request: ${this.requestOptions?.options.method?.toUpperCase()} ${this.requestOptions?.url}`,
+      `Request: ${this.requestOptions?.method?.toUpperCase()} ${this.requestOptions?.url}`,
       async () => {
         await allure.attachment(
           'Request Headers',
-          JSON.stringify(this.requestOptions?.options.headers, null, 2),
+          JSON.stringify(this.requestOptions?.headers, null, 2),
           'application/json',
         );
         await allure.attachment(
           'Request Body',
-          this.requestOptions?.options.data
-            ? JSON.stringify(this.requestOptions?.options.data, null, 2)
+          this.requestOptions?.data
+            ? JSON.stringify(this.requestOptions?.data, null, 2)
             : '{}',
           'application/json',
         );

@@ -1,6 +1,6 @@
 const inputBorderColor = {
-  valid: '#198754',
-  inValid: '#dc3545',
+  valid: '#75b798',
+  inValid: '#ea868f',
 };
 
 const inputBorderClass = {

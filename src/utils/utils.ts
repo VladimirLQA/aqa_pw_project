@@ -49,7 +49,7 @@ const pickFunc = <T extends {}, K extends keyof T>(
 /**
  * Creates an object composed of the picked `object` properties.
  *
- * @param {Object} object The source object.
+ * @param {object} object The source object.
  * @param {...(string|string[])} keys The properties to pick.
  * @returns {Object} Returns the new object.
  * @example
@@ -59,10 +59,10 @@ const pickFunc = <T extends {}, K extends keyof T>(
  * pick(object, ['a', 'c']);
  * // => { 'a': 1, 'c': 3 }
  */
-export const pick = <T extends {}, K extends keyof T>(
+export const pick = <T extends object, K extends keyof T>(
   object: T,
   keys: K[] | K,
-): Pick<T, K> =>
+): object =>
     pickFunc(object, (k) =>
       (Array.isArray(keys) ? keys : [keys]).includes(k as K),
     );
@@ -80,7 +80,7 @@ export const pick = <T extends {}, K extends keyof T>(
  * omit(object, ['a', 'c']);
  * // => { 'b': '2' }
  */
-export const omit = <T extends {}, K extends keyof T>(object: T, keys: K[]): Pick<T, K> =>
+export const omit = <T extends object, K extends keyof T>(object: T, keys: K[]): object =>
   pickFunc(object, (k) => !(Array.isArray(keys) ? keys : [keys]).includes(k as K));
 
 export const getElementSelector = (item: Locator | string) => {
