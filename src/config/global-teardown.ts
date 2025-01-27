@@ -1,7 +1,3 @@
-import reporter from '../utils/reporter/reporters/reporter';
+const globalTeardown = () => {};
 
-const globalTeardown = () => {
-    reporter.
-
-};
 export default globalTeardown;
