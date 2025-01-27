@@ -1,4 +1,4 @@
-import { COUNTRY } from '../../types/customers/customers.types';
+import { COUNTRIES } from '../../types/customers/customers.types';
 import { DELIVERY, ORDER_STATUSES } from '../../types/orders/order.types';
 import { MANUFACTURERS } from '../../types/products/product.types';
 
@@ -15,7 +15,7 @@ export const DELIVERY_SCHEMA = {
       properties: {
         flat: { type: 'integer' },
         house: { type: 'integer' },
-        country: { enum: Object.values(COUNTRY) },
+        country: { enum: Object.values(COUNTRIES) },
         street: { type: 'string' },
         city: { type: 'string' },
       },
@@ -94,7 +94,7 @@ export const CREATE_ORDER_SCHEMA = {
             email: { type: 'string' },
             flat: { type: 'integer' },
             house: { type: 'integer' },
-            country: { enum: Object.values(COUNTRY) },
+            country: { enum: Object.values(COUNTRIES) },
             createdOn: { type: 'string' },
             notes: { type: 'string' },
             street: { type: 'string' },

@@ -1,23 +1,36 @@
 import { expect } from '@playwright/test';
-import { STATUS_CODES } from 'http';
 import { generateNewProduct } from '../../data/products/productGeneration';
 import { IProductFromResponse, IProduct } from '../../types/products/product.types';
 import { validateResponse, validateSchema } from '../../utils/validations/apiValidation';
 import { controllers } from '../controllers';
 import { productResponseSchema } from '../../data/schema/product.schema';
-import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 import signInApiService from './signIn.service';
+import { logStep } from '../../utils/reporter/decorators/logStep';
+import { HTTP_STATUS_CODES } from '../../data/http/statusCodes';
 
 class ProductApiService {
   private createdProducts: IProductFromResponse[] = [];
   constructor(private controller = controllers.products) {}
 
-  async create(token: string, customData?: Partial<IProduct>) {
-    const response = await this.controller.create({ data: generateNewProduct(customData), token });
+  @logStep('Create product')
+  async create(customData?: Partial<IProduct>, token?: string ) {
+    const response = await this.controller.create({
+      data: generateNewProduct(customData),
+      token: token ?? await signInApiService.getToken()
+    });
     validateResponse({ response, status: HTTP_STATUS_CODES.CREATED, IsSuccess: true, ErrorMessage: null });
     validateSchema(response, productResponseSchema);
     this.createdProducts.push(response.data.Product);
     return response.data.Product;
+  }
+
+  @logStep('Create {amount} products')
+  async populateProducts(amount: number, customData?: Partial<IProduct>, token?: string) {
+    const currentProducts: IProductFromResponse[] = [];
+    for (let i = 0; i < amount; i++) {
+      currentProducts.push(await this.create(customData, token));
+    }
+    return currentProducts;
   }
 
   getCreatedProduct(id?: string) {
@@ -36,16 +49,17 @@ class ProductApiService {
     this.createdProducts.splice(index, 1);
   }
 
-  async delete(token: string, id?: string) {
+  async delete(id?: string, token?: string, ) {
+    const t = token ?? await signInApiService.getToken();
     if (id) {
-      const response = await this.controller.delete({ data: { _id: id }, token });
-      expect(response.status).toBe(STATUS_CODES.DELETED);
+      const response = await this.controller.delete({ data: { _id: id }, token: t });
+      expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
       return;
     }
 
     for (const product of this.createdProducts) {
-      const response = await this.controller.delete({ data: { _id: product._id }, token });
-      expect(response.status).toBe(STATUS_CODES.DELETED);
+      const response = await this.controller.delete({ data: { _id: product._id }, token: t });
+      expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
     }
     this.createdProducts = [];
   }
@@ -55,7 +69,7 @@ class ProductApiService {
     const storedProduct = this.createdProducts.find((p) => p.name === name);
     if (storedProduct) {
       const response = await this.controller.delete({ data: { _id: storedProduct?._id }, token });
-      expect(response.status).toBe(STATUS_CODES.DELETED);
+      expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
       return;
     }
 
@@ -66,7 +80,7 @@ class ProductApiService {
     }
 
     const response = await this.controller.delete({ data: { _id: productServer?._id }, token });
-    expect(response.status).toBe(STATUS_CODES.DELETED);
+    expect(response.status).toBe(HTTP_STATUS_CODES.DELETED);
   }
 
   private findProductIndex(id: string) {
