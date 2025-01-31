@@ -8,7 +8,7 @@ export function generateNewProduct(customProductFields?: Partial<IProduct>) {
     price: faker.number.int({ min: 1, max: 99999 }),
     amount: faker.number.int({ min: 0, max: 999 }),
     manufacturer: getRandomObjectValue<typeof MANUFACTURERS>(MANUFACTURERS),
-    notes: faker.string.alpha({ length: { min: 5, max: 254 }, casing: 'mixed' }),
+    notes: faker.string.alpha({ length: { min: 5, max: 250 }, casing: 'mixed' }),
     ...customProductFields,
   };
   return product;

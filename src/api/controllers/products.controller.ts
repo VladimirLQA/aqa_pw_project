@@ -10,12 +10,10 @@ class ProductsController {
   @logStep('Get product via API')
   async getById(params: RequestParams<Id>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints['Product By Id'](params.data!._id),
-      options: {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', Authorization: params.token },
-      },
-      requestType: 'json',
+      url: apiConfig.endpoints['Product By Id'](params.data!._id),
+      baseURL: apiConfig.baseURL,
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: params.token },
     };
     return this.client.sendRequest<IProductResponse>(options);
   }
@@ -23,12 +21,10 @@ class ProductsController {
   @logStep('Get all products via API')
   async getAll(params: Partial<RequestParams<Id>>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints.Products,
-      options: {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', Authorization: params.token! },
-      },
-      requestType: 'json',
+      url: apiConfig.endpoints.Products,
+      baseURL: apiConfig.baseURL,
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: params.token! },
     };
     return this.client.sendRequest<IProductsResponse>(options);
   }
@@ -36,13 +32,11 @@ class ProductsController {
   @logStep('Create product via API')
   async create(params: RequestParams<IProduct>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints.Products,
-      options: {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: params.token },
-        data: params.data,
-      },
-      requestType: 'json',
+      url: apiConfig.endpoints.Products,
+      baseURL: apiConfig.baseURL,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: params.token },
+      data: params.data,
     };
     return this.client.sendRequest<IProductResponse>(options);
   }
@@ -50,13 +44,11 @@ class ProductsController {
   @logStep('Update product via API')
   async update(params: RequestParams<Id & TBody<IProduct>>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints['Product By Id'](params.data!._id!),
-      options: {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: params.token },
-        data: params.data?.body,
-      },
-      requestType: 'json',
+      url: apiConfig.endpoints['Product By Id'](params.data!._id!),
+      baseURL: apiConfig.baseURL,
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: params.token },
+      data: params.data?.body,
     };
     return this.client.sendRequest<IProductResponse>(options);
   }
@@ -64,12 +56,10 @@ class ProductsController {
   @logStep('Delete product via API')
   async delete(params: RequestParams<Id>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints['Product By Id'](params.data!._id),
-      options: {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', Authorization: params.token },
-      },
-      requestType: 'json',
+      url: apiConfig.endpoints['Product By Id'](params.data!._id),
+      baseURL: apiConfig.baseURL,
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: params.token },
     };
     return this.client.sendRequest<null>(options);
   }

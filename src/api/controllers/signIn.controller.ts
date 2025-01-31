@@ -10,13 +10,11 @@ class SignInController {
   @logStep('Sign in via API')
   async login(params: Omit<RequestParams<IUserCredentials>, 'token'>) {
     const options: IRequestOptions = {
-      url: apiConfig.baseURL + apiConfig.endpoints.Login,
-      options: {
-        method: 'POST',
-        headers: {},
-        data: params.data,
-      },
-      requestType: 'json',
+      url: apiConfig.endpoints.Login,
+      baseURL: apiConfig.baseURL,
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      data: params.data,
     };
     return this.client.sendRequest(options);
   }
