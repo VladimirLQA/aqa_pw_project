@@ -4,4 +4,4 @@ import { BaseReporter } from 'utils/reporter/reporters/baseReporter';
 
 const reporterServices: Record<string, BaseReporter> = { allure, html };
 
-export default reporterServices[process.env.REPORTER || 'allure'];
+export default reporterServices[process.env.REPORTER || 'html'];

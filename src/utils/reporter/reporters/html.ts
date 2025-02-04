@@ -5,7 +5,7 @@ class HTMLReporter extends BaseReporter {
   private testInfo = test.info;
 
   protected async reportApiRequestData() {
-    await test.step('',
+    await test.step(`Request: [${this.requestOptions?.method?.toUpperCase()}] [${this.requestOptions?.url}]`,
       async () => {
         await this.testInfo().attach(`Request Headers: [${this.requestOptions?.method?.toUpperCase()}] [${this.requestOptions?.url}]`, {
           body: JSON.stringify(this.requestOptions?.headers, null, 2) ?? '',
@@ -20,7 +20,7 @@ class HTMLReporter extends BaseReporter {
   }
 
   protected async reportApiResponseData() {
-    await test.step('',
+    await test.step(`Response Headers [${this.requestOptions?.method?.toUpperCase()}] [${this.response?.status}] [${this.requestOptions?.url}]`,
       async () => {
         await this.testInfo().attach(`Response Headers [${this.requestOptions?.method?.toUpperCase()}] [${this.response?.status}] [${this.requestOptions?.url}]`, {
           body: JSON.stringify(this.response?.headers, null, 2) ?? '',
